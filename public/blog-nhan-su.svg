@@ -1,0 +1,20 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g4" x1="0" y1="0" x2="1200" y2="700" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#C7D2FE"/>
+      <stop offset="1" stop-color="#F5F5F4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="700" fill="url(#g4)"/>
+  <rect x="85" y="95" width="1030" height="510" rx="24" fill="white" fill-opacity="0.75"/>
+  <text x="135" y="220" fill="#312E81" font-family="Inter, Arial, sans-serif" font-size="40" font-weight="700">
+    TÑi °u Nhân sñ và hiÇu su¥t
+  </text>
+  <text x="135" y="280" fill="#4B5563" font-family="Inter, Arial, sans-serif" font-size="26">
+    V«n úng lu­t, v«n tng tr°ßng
+  </text>
+  <circle cx="250" cy="430" r="70" fill="#EEF2FF"/>
+  <circle cx="430" cy="430" r="70" fill="#EEF2FF"/>
+  <circle cx="610" cy="430" r="70" fill="#EEF2FF"/>
+  <rect x="740" y="360" width="260" height="140" rx="16" fill="#EEF2FF"/>
+</svg>

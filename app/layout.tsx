@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
+import Nav from "@/components/nav";
+import SiteFooter from "@/components/footer";
+import ContactFloatingButtons from "@/components/contact";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-geist" });
@@ -48,8 +51,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi" className="scroll-smooth">
-      <body className={inter.className}>
+      <body className={`${inter.className} ${inter.variable}`}>
+        <Nav />
         {children}
+        <SiteFooter />
+        <ContactFloatingButtons />
         <Script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" strategy="afterInteractive" />
       </body>
     </html>

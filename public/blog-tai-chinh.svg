@@ -1,0 +1,19 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1200" y2="700" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FDE68A"/>
+      <stop offset="1" stop-color="#F5F5F4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="700" fill="url(#g1)"/>
+  <rect x="80" y="90" width="1040" height="520" rx="24" fill="white" fill-opacity="0.75"/>
+  <text x="130" y="220" fill="#1F2937" font-family="Inter, Arial, sans-serif" font-size="40" font-weight="700">
+    B£n tin Tài chính doanh nghiÇp
+  </text>
+  <text x="130" y="280" fill="#4B5563" font-family="Inter, Arial, sans-serif" font-size="26">
+    SunPrime Journal
+  </text>
+  <line x1="130" y1="340" x2="1000" y2="340" stroke="#D6D3D1" stroke-width="4"/>
+  <line x1="130" y1="390" x2="880" y2="390" stroke="#D6D3D1" stroke-width="4"/>
+  <line x1="130" y1="440" x2="960" y2="440" stroke="#D6D3D1" stroke-width="4"/>
+</svg>

@@ -23,6 +23,26 @@ const nextConfig: NextConfig = {
         hostname: 'logo.clearbit.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'blogg.advokatguiden.no',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.advokatguiden.no',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.advokatguiden.no',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'flagcdn.com',
+        pathname: '**',
+      },
     ],
   },
 };
