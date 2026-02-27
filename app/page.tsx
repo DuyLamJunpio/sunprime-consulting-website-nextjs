@@ -1,8 +1,9 @@
 'use client';
 import { newsArticles } from "@/data/news";
-import { allServices } from "@/data/services";
+import { allServices, serviceCategories } from "@/data/services";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 
 export default function Home() {
   // --- LOGIC STATES ---
@@ -21,6 +22,26 @@ export default function Home() {
           ? "building-2"
           : "users",
   }));
+  const heroServiceCategories = useMemo(
+    () =>
+      ["ke-toan", "thanh-lap", "nhan-su"]
+        .map((categoryId) => serviceCategories.find((category) => category.id === categoryId))
+        .filter((category): category is NonNullable<typeof category> => Boolean(category)),
+    []
+  );
+  const [heroUpdateIndex, setHeroUpdateIndex] = useState(0);
+  const heroUpdates = [
+    "Tuần này SunPrime hoàn tất 24 bộ hồ sơ thuế cho khối F&B.",
+    "Thêm 12 doanh nghiệp mới ký gói kế toán trọn gói trong tháng.",
+    "Cập nhật checklist pháp lý 2026 cho 3 nhóm ngành trọng điểm.",
+    "Đội ngũ đã hỗ trợ 37 phiên giải trình cùng cơ quan thuế quý này.",
+  ];
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setHeroUpdateIndex((prev) => (prev + 1) % heroUpdates.length);
+    }, 3000);
+    return () => window.clearInterval(intervalId);
+  }, [heroUpdates.length]);
 
   const renderServiceCardIcon = (slug: string) => {
     switch (slug) {
@@ -505,7 +526,10 @@ export default function Home() {
 
   return (
     <>
-      <main className="relative flex min-h-[calc(100vh-5rem)] w-full items-center overflow-hidden px-4 py-16 sm:px-6 lg:px-8">
+      <main
+        id="hero-section"
+        className="relative -mt-20 flex min-h-screen w-full items-center overflow-hidden px-4 pb-16 pt-20 sm:px-6 lg:px-8"
+      >
         <div className="absolute inset-0">
           <Image
             src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=1800&auto=format&fit=crop"
@@ -515,128 +539,62 @@ export default function Home() {
             className="h-full w-full object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-white/8" />
+          <div className="absolute inset-0 bg-black/45" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-7xl">
-          {/* Headlines */}
+        <div className="relative z-10 mx-auto w-full max-w-7xl text-white">
           <div className="max-w-4xl">
-          <h1 className="mb-6 text-4xl font-semibold leading-[1.15] tracking-tight text-white drop-shadow-[0_3px_14px_rgba(0,0,0,0.45)] lg:text-5xl">
-            Kế toán – Pháp lý doanh nghiệp: Chuẩn ngay từ đầu
-          </h1>
-          <p className="mb-10 max-w-3xl text-lg font-normal leading-relaxed text-text-inverse drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)]">
-            Sun Prime Consulting là đơn vị tư vấn doanh nghiệp chuyên về thành lập, pháp lý, kế toán và vận hành.
-            Chúng tôi đồng hành cùng doanh nghiệp xây dựng nền tảng chuẩn luật – rõ số – vững hệ thống, đặc biệt trong lĩnh vực nhà hàng – khách sạn.
+            <Link
+              href="https://portal.sunprime.vn"
+              target="_blank"
+              rel="noreferrer"
+              className="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-colors duration-200 hover:scale-[1.02] hover:text-white"
+            >
+              <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_0_4px_rgba(74,222,128,0.18)]" />
+              <span>sunprimePortal v1 đã hoạt động</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-3.5 w-3.5"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </Link>
+
+            <div className="relative mt-2 max-w-3xl">
+              <div className="space-y-1">
+                {heroServiceCategories.map((category) => (
+                  <Link
+                    key={category.id}
+                    href={`/services#${category.id}`}
+                    className="group inline-flex origin-left items-center gap-3 text-left text-5xl font-medium leading-tight text-white transition-all duration-300 hover:scale-[1.03] hover:text-white lg:text-6xl"
+                  >
+                    <span>{category.title}</span>
+                    <span className="translate-x-1 text-3xl text-white opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 lg:text-4xl">
+                      →
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div className="absolute bottom-4 right-4 z-20 max-w-[320px] rounded-lg border border-white/25 bg-brand-ink/55 px-3 py-2 text-white backdrop-blur-sm sm:bottom-6 sm:right-6">
+          <p className="text-[10px] uppercase tracking-widest text-white/80">Thông tin mới</p>
+          <p key={heroUpdateIndex} className="mt-1 text-xs leading-relaxed text-white animate-fade-up">
+            {heroUpdates[heroUpdateIndex]}
           </p>
-          </div>
-
-          {/* Main CTA Bar */}
-          <div className="flex max-w-xl flex-col gap-2 sm:flex-row">
-            <Link
-              href="/services"
-              className="flex w-full items-center justify-center rounded-lg bg-brand px-5 py-2.5 text-base font-medium text-text-inverse shadow-sm transition-all duration-200 hover:bg-brand-strong hover:shadow-md active:scale-95"
-            >
-              Dịch vụ của chúng tôi
-            </Link>
-            <Link
-              href="/contact"
-              className="flex w-full items-center justify-center rounded-lg border border-brand bg-surface-base/75 px-5 py-2.5 text-base font-medium text-brand transition-all duration-200 hover:bg-brand-soft"
-            >
-              Liên hệ ngay
-            </Link>
-          </div>
-
-          {/* Value Props */}
-          <div className="mt-20 grid grid-cols-1 gap-12 text-center md:grid-cols-3">
-            <div className="group rounded-2xl border border-white/30 bg-white/80 p-5 shadow-lg backdrop-blur-[1px]">
-              <div className="flex cursor-default flex-col items-center">
-            <div className="mb-4 rounded-full bg-surface-base px-3 py-3 text-brand transition-transform duration-300 group-hover:scale-110">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                data-lucide="calculator"
-                className="h-8 w-8 stroke-[1.25]"
-              >
-                <rect x="4" y="2" width="16" height="20" rx="2" />
-                <line x1="8" y1="6" x2="16" y2="6" />
-                <line x1="8" y1="11" x2="10" y2="11" />
-                <line x1="12" y1="11" x2="14" y2="11" />
-                <line x1="8" y1="15" x2="10" y2="15" />
-                <line x1="12" y1="15" x2="14" y2="15" />
-              </svg>
-            </div>
-            <h3 className="mb-2 text-lg font-semibold tracking-tight text-text-primary">Dịch vụ kế toán</h3>
-            <p className="text-base font-normal leading-relaxed text-text-secondary">
-              Cung cấp giải pháp kế toán trọn gói, kê khai thuế và báo cáo định kỳ giúp doanh nghiệp vận hành
-              minh bạch, đúng chuẩn.
-            </p>
-              </div>
-          </div>
-
-            <div className="group rounded-2xl border border-white/30 bg-white/80 p-5 shadow-lg backdrop-blur-[1px]">
-              <div className="flex cursor-default flex-col items-center">
-            <div className="mb-4 rounded-full bg-surface-base px-3 py-3 text-brand transition-transform duration-300 group-hover:scale-110">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                data-lucide="building-2"
-                className="h-8 w-8 stroke-[1.25]"
-              >
-                <path d="M3 21h18" />
-                <path d="M5 21V7l7-4l7 4v14" />
-                <path d="M9 21v-6h6v6" />
-              </svg>
-            </div>
-            <h3 className="mb-2 text-lg font-semibold tracking-tight text-text-primary">Tư vấn & thành lập doanh nghiệp</h3>
-            <p className="text-base font-normal leading-relaxed text-text-secondary">
-              Tư vấn mô hình phù hợp, hoàn thiện hồ sơ pháp lý và triển khai thủ tục thành lập nhanh, đúng quy
-              định ngay từ đầu.
-            </p>
-              </div>
-          </div>
-
-            <div className="group rounded-2xl border border-white/30 bg-white/80 p-5 shadow-lg backdrop-blur-[1px]">
-              <div className="flex cursor-default flex-col items-center">
-            <div className="mb-4 rounded-full bg-surface-base px-3 py-3 text-brand transition-transform duration-300 group-hover:scale-110">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                data-lucide="megaphone"
-                className="h-8 w-8 stroke-[1.25]"
-              >
-                <path d="M3 11v2a1 1 0 0 0 1 1h3l3 5h2l-2-5l8-4V8l-8-4l-3 5H4a1 1 0 0 0-1 1z" />
-                <path d="M18 9v6" />
-              </svg>
-            </div>
-            <h3 className="mb-2 text-lg font-semibold tracking-tight text-text-primary">Marketing</h3>
-            <p className="text-base font-normal leading-relaxed text-text-secondary">
-              Xây dựng chiến lược truyền thông, nội dung và nhận diện thương hiệu để tăng độ phủ, thu hút khách
-              hàng và nâng cao doanh số.
-            </p>
-              </div>
-          </div>
-          </div>
         </div>
       </main>
 

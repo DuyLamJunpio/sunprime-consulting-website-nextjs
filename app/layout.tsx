@@ -4,6 +4,7 @@ import Script from "next/script";
 import Nav from "@/components/nav";
 import SiteFooter from "@/components/footer";
 import ContactFloatingButtons from "@/components/contact";
+import ScrollReveal from "@/components/scroll-reveal";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-geist" });
@@ -52,6 +53,7 @@ export default function RootLayout({
   return (
     <html lang="vi" className="scroll-smooth">
       <body className={`${inter.className} ${inter.variable}`}>
+        <ScrollReveal />
         <Nav />
         {children}
         <SiteFooter />

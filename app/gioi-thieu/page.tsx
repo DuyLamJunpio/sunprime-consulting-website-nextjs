@@ -1,3 +1,4 @@
+import PartnerShowcaseSection from "@/components/partner-showcase-section";
 import Link from "next/link";
 
 export default function AboutPage() {
@@ -182,6 +183,8 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      <PartnerShowcaseSection showHero={false} />
     </main>
   );
 }

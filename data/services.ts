@@ -34,7 +34,7 @@ export type ServiceCategory = {
 export const serviceCategories: ServiceCategory[] = [
   {
     id: 'ke-toan',
-    title: 'Dịch vụ kế toán',
+    title: 'Kế toán',
     summary: 'Vận hành phòng kế toán thuê ngoài có quy trình minh bạch.',
     description: 'Đồng hành từ hạch toán, kê khai thuế đến kiểm soát rủi ro kế toán.',
     accent: 'from-amber-200/70 via-orange-100/70 to-yellow-100/80',
@@ -152,7 +152,7 @@ export const serviceCategories: ServiceCategory[] = [
   },
   {
     id: 'thanh-lap',
-    title: 'Tư vấn & thành lập doanh nghiệp',
+    title: 'Thành lập doanh nghiệp',
     summary: 'Thiết lập pháp lý chuẩn chỉnh từ ngày đầu vận hành.',
     description: 'Tư vấn loại hình, hồ sơ pháp lý và các thủ tục bắt buộc sau thành lập.',
     accent: 'from-neutral-200/70 via-stone-100/80 to-white',
@@ -234,7 +234,7 @@ export const serviceCategories: ServiceCategory[] = [
   },
   {
     id: 'nhan-su',
-    title: 'Dịch vụ nhân sự',
+    title: 'Nhân sự',
     summary: 'Thiết lập nền tảng nhân sự, bảo hiểm và thuế thu nhập cá nhân.',
     description: 'Chuẩn hóa hồ sơ lao động và nghĩa vụ bảo hiểm, thuế cho người lao động.',
     accent: 'from-emerald-200/70 via-teal-100/80 to-green-100/70',

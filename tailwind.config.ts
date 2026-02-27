@@ -31,20 +31,20 @@ const config: Config = {
          * ============================================================
          */
         brand: {
-          DEFAULT: "#4F46E5", // màu chủ đạo chính
-          strong: "#4338CA", // hover/active cho màu chủ đạo
-          soft: "#EEF2FF", // nền nhấn nhẹ
-          "soft-hover": "#E0E7FF", // hover cho nền nhấn nhẹ
-          ring: "#C7D2FE", // ring/focus/outline nhấn
-          ink: "#3730A3", // chữ/biểu tượng trên nền brand mềm
+          DEFAULT: "#D97706", // màu chủ đạo chính
+          strong: "#B45309", // hover/active cho màu chủ đạo
+          soft: "#FFFBEB", // nền nhấn nhẹ
+          "soft-hover": "#FEF3C7", // hover cho nền nhấn nhẹ
+          ring: "#FDE68A", // ring/focus/outline nhấn
+          ink: "#78350F", // chữ/biểu tượng trên nền brand mềm
         },
         text: {
           primary: "#0F172A", // heading/chữ quan trọng
           secondary: "#475569", // nội dung mặc định
           muted: "#64748B", // mô tả/chú thích
           inverse: "#FFFFFF", // chữ trên nền tối
-          link: "#4F46E5", // màu link mặc định
-          "link-hover": "#4338CA", // màu link hover
+          link: "#D97706", // màu link mặc định
+          "link-hover": "#B45309", // màu link hover
         },
         surface: {
           base: "#FFFFFF", // nền trang chính
@@ -54,17 +54,17 @@ const config: Config = {
           elevated: "#FFFFFF", // nền khối nổi (modal/dropdown)
         },
         section: {
-          primary: "#4F46E5", // section màu thương hiệu đậm
+          primary: "#D97706", // section màu thương hiệu đậm
           alt: "#F8FAFC", // section màu thay thế trung tính
-          "grad-start": "#DCD6FF", // gradient section sáng - điểm đầu
-          "grad-mid": "#DCEBFF", // gradient section sáng - điểm giữa
-          "grad-end": "#D1F2F2", // gradient section sáng - điểm cuối
+          "grad-start": "#FEF3C7", // gradient section sáng - điểm đầu
+          "grad-mid": "#FDE68A", // gradient section sáng - điểm giữa
+          "grad-end": "#FCD34D", // gradient section sáng - điểm cuối
         },
         button: {
-          primary: "#4F46E5", // nút chính
-          "primary-hover": "#4338CA",
-          secondary: "#EEF2FF", // nút phụ
-          "secondary-hover": "#E0E7FF",
+          primary: "#D97706", // nút chính
+          "primary-hover": "#B45309",
+          secondary: "#FFFBEB", // nút phụ
+          "secondary-hover": "#FEF3C7",
           ghost: "#FFFFFF", // nền nút ghost trên nền trắng
           "ghost-hover": "#F8FAFC",
           text: "#FFFFFF", // chữ nút chính
@@ -74,7 +74,7 @@ const config: Config = {
           DEFAULT: "#E2E8F0", // viền chuẩn
           soft: "#EDF2F7", // viền nhẹ
           strong: "#CBD5E1", // viền nhấn
-          brand: "#C7D2FE", // viền theo màu thương hiệu
+          brand: "#FDE68A", // viền theo màu thương hiệu
         },
         state: {
           success: "#10B981",

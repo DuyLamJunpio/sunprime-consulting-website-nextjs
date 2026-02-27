@@ -1,5 +1,8 @@
 'use client';
 
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+
 const FALLBACK_DELAY_MS = 1200;
 const CONTACT_CONFIG = {
   phoneNumber: '0988412965',
@@ -45,8 +48,36 @@ const openAppThenFallback = (appUrl: string, webUrl: string) => {
 };
 
 export default function ContactFloatingButtons() {
+  const pathname = usePathname();
+  const [isVisible, setIsVisible] = useState(pathname !== "/");
+
+  useEffect(() => {
+    const heroElement = document.getElementById("hero-section");
+
+    if (!heroElement || pathname !== "/") {
+      setIsVisible(true);
+      return;
+    }
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const heroBottom = heroElement.offsetTop + heroElement.offsetHeight;
+      const triggerOffset = 80;
+      setIsVisible(currentScrollY + triggerOffset >= heroBottom);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [pathname]);
+
   return (
-    <div className="contact-stack fixed bottom-6 right-6 z-50 flex flex-col gap-4 animate-fade-up" style={{ animationDelay: '1s' }}>
+    <div
+      className={`contact-stack fixed bottom-6 right-6 z-50 flex flex-col gap-4 transition-all duration-300 ${
+        isVisible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"
+      }`}
+    >
       <div className="contact-cta-badge contact-cta-toast">
         <span className="contact-cta-dot" />
         Nhận tư vấn ngay
