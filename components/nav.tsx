@@ -1,6 +1,5 @@
 "use client";
 
-import { serviceCategories } from "@/data/services";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -8,17 +7,12 @@ import { useEffect, useState } from "react";
 export default function Nav() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isOverHero, setIsOverHero] = useState(false);
   const mainNavLinkClass = isOverHero
     ? "relative inline-flex pb-1 text-white transition-all duration-300 hover:-translate-y-0.5 hover:text-white after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-white after:transition-transform after:duration-300 hover:after:scale-x-100"
     : "relative inline-flex pb-1 text-text-secondary transition-all duration-300 hover:-translate-y-0.5 hover:text-brand after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-brand after:transition-transform after:duration-300 hover:after:scale-x-100";
   const mobileNavLinkClass =
     "py-2 text-lg font-medium text-text-secondary transition-all duration-200 hover:translate-x-1 hover:text-brand";
-  const sunprimePortalUrl = "https://portal.sunprime.vn";
-  const desktopServiceNav = ["ke-toan", "thanh-lap", "nhan-su"]
-    .map((categoryId) => serviceCategories.find((category) => category.id === categoryId))
-    .filter((category): category is NonNullable<typeof category> => Boolean(category));
 
   useEffect(() => {
     const heroElement = document.getElementById("hero-section");
@@ -56,12 +50,6 @@ export default function Nav() {
   const mobileMenuButtonClass = isOverHero
     ? "p-2 text-white hover:text-white lg:hidden"
     : "p-2 text-text-secondary hover:text-text-primary lg:hidden";
-  const logoContainerClass = isOverHero
-    ? "text-[#4F46E5] transition-transform duration-300 group-hover:scale-110"
-    : "text-[#4F46E5] transition-transform duration-300 group-hover:scale-110";
-  const logoImageClass = isOverHero
-    ? "h-9 w-9 object-contain brightness-125 contrast-125 saturate-125"
-    : "h-9 w-9 object-contain";
 
   return (
     <nav
@@ -183,33 +171,46 @@ export default function Nav() {
         className={`absolute left-0 top-full w-full border-b border-slate-200 bg-surface-base px-4 py-4 shadow-xl lg:hidden ${isMobileMenuOpen ? "flex flex-col gap-4" : "hidden"
           }`}
       >
-        <input
-          type="text"
-          placeholder="Search"
-          className="w-full rounded-lg border border-slate-200 bg-surface-section py-3 pl-4 pr-4 text-base focus:ring-2 focus:ring-brand"
-        />
-        <Link href="#" className={`${mobileNavLinkClass} border-b border-slate-100`}>
-          Get legal help
+        <Link href="/" className={`${mobileNavLinkClass} border-b border-slate-100`} onClick={() => setIsMobileMenuOpen(false)}>
+          Trang chủ
         </Link>
-        <Link href="#" className="border-b border-slate-100 py-2 text-lg font-medium text-brand transition-all duration-200 hover:translate-x-1">
-          Search for lawyers
-        </Link>
-        <Link href="/gioi-thieu" className={mobileNavLinkClass}>
+        <Link href="/gioi-thieu" className={`${mobileNavLinkClass} border-b border-slate-100`} onClick={() => setIsMobileMenuOpen(false)}>
           Giới thiệu
         </Link>
-        <Link href="#" className={mobileNavLinkClass}>
-          Write a review
+        <Link href="/services" className={`${mobileNavLinkClass} border-b border-slate-100`} onClick={() => setIsMobileMenuOpen(false)}>
+          Dịch vụ
         </Link>
-        <Link href="#" className={mobileNavLinkClass}>
-          For lawyers
+        <Link href="#" className={mobileNavLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
+          Tin tức
         </Link>
-        <Link
-          href={sunprimePortalUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center justify-center rounded-lg border border-emerald-300 bg-emerald-50 px-4 py-2.5 font-medium text-emerald-700 transition-all duration-200 hover:border-emerald-400 hover:bg-emerald-100 hover:text-emerald-800"
+        <button
+          type="button"
+          className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-surface-section px-4 py-2.5 font-medium text-text-secondary transition-all duration-200 hover:text-text-primary"
         >
-          SunPrime Portal
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-4 w-4"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+            <path d="M2 12h20" />
+          </svg>
+          <span>EN / VI</span>
+        </button>
+        <Link
+          href="#"
+          className="inline-flex items-center justify-center rounded-lg bg-brand-soft px-4 py-2.5 font-medium text-brand transition-all duration-200 hover:bg-brand-soft-hover"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          Nhận tư vấn miễn phí
         </Link>
       </div>
     </nav>
