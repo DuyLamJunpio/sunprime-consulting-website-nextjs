@@ -2,6 +2,7 @@
 
 import { Partner, partners } from "@/data/partners";
 import Image from "next/image";
+import { createPortal } from "react-dom";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/components/i18n-provider";
@@ -25,6 +26,19 @@ function PartnerShowcaseSectionContent({ showHero = true, containerClassName = "
   }, [partnerId]);
   const [selectedPartner, setSelectedPartner] = useState<Partner | null>(() => initialPartner);
   const [isModalOpen, setIsModalOpen] = useState(() => Boolean(initialPartner));
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  // Khóa scroll nền khi modal mở
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [isModalOpen]);
 
   const modalCloseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const industries = ["All", ...new Set(partners.map((p) => p.industry))];
@@ -219,7 +233,7 @@ function PartnerShowcaseSectionContent({ showHero = true, containerClassName = "
         </section>
       </section>
 
-      {selectedPartner && (
+      {mounted && selectedPartner && createPortal(
         <div
           id="modal-overlay"
           className={`fixed inset-0 z-[100] ${isModalOpen ? "pointer-events-auto" : "pointer-events-none"}`}
@@ -326,7 +340,8 @@ function PartnerShowcaseSectionContent({ showHero = true, containerClassName = "
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </section>
   );

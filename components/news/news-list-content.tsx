@@ -78,7 +78,7 @@ export default function NewsListContent({ posts, pinnedPosts, page, hasMore }: P
               <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 lg:text-lg">{t.heroDesc}</p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
-                  href="tel:+84988412965"
+                  href="tel:+84914699877"
                   className="inline-flex items-center gap-2 rounded-lg bg-surface-base px-6 py-3 text-sm font-semibold text-brand transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-soft"
                 >
                   {t.consultNow}

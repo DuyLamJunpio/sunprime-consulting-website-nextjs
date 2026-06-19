@@ -176,7 +176,7 @@ export default function Nav() {
             </button>
 
             <Link
-              href="#"
+              href="/contact"
               className={ctaButtonClass}
             >
               {navText.consult}
@@ -290,7 +290,7 @@ export default function Nav() {
                   <span>{lang === "vi" ? "EN / VI" : "VI / EN"}</span>
                 </button>
                 <Link
-                  href="#"
+                  href="/contact"
                   className="inline-flex items-center justify-center rounded-xl bg-brand px-4 py-3 font-semibold text-white shadow-soft transition-all duration-200 hover:bg-brand-strong"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >

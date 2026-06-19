@@ -131,7 +131,7 @@ export default function BlogDetailContent({ post, relatedPosts }: Props) {
             <h3 className="mt-2 text-xl font-semibold tracking-tight">{t.talkExpert}</h3>
             <p className="mt-2 text-sm leading-relaxed text-neutral-300">{t.talkDesc}</p>
             <a
-              href="mailto:hello@sunprime.consulting"
+              href="mailto:giangtran.sunprime@gmail.com"
               className="mt-4 inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-medium text-neutral-900"
             >
               {t.contactNow}

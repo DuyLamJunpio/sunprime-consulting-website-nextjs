@@ -116,14 +116,14 @@ export default function ServiceDetailContent({ slug }: { slug: string }) {
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <a
-                  href="tel:+84988412965"
+                  href="tel:+84914699877"
                   className="inline-flex items-center gap-2 rounded-lg bg-surface-base px-6 py-3 text-sm font-semibold text-brand transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-soft"
                 >
                   {t.consultFree}
                   <iconify-icon icon="solar:phone-linear" width={16} />
                 </a>
                 <a
-                  href="mailto:hello@sunprime.consulting"
+                  href="mailto:giangtran.sunprime@gmail.com"
                   className="inline-flex items-center gap-2 rounded-lg border border-white/40 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/20"
                 >
                   {t.getProposal}
@@ -279,14 +279,14 @@ export default function ServiceDetailContent({ slug }: { slug: string }) {
                 <p className="mt-4 text-sm text-white/80">{t.bookingDesc}</p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link
-                    href="tel:+84988412965"
+                    href="tel:+84914699877"
                     className="inline-flex items-center gap-2 rounded-lg bg-surface-base px-5 py-3 text-sm font-semibold text-brand transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-soft"
                   >
                     {t.consultFree}
                     <iconify-icon icon="solar:phone-linear" width={16} />
                   </Link>
                   <a
-                    href="mailto:hello@sunprime.consulting"
+                    href="mailto:giangtran.sunprime@gmail.com"
                     className="inline-flex items-center gap-2 rounded-lg border border-white/35 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/20"
                   >
                     {t.getProposal}

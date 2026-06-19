@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 
 const FALLBACK_DELAY_MS = 1200;
 const CONTACT_CONFIG = {
-  phoneNumber: '0988412965',
-  telegramUsername: '@duytung180703',
+  phoneNumber: '0914699877',
+  telegramUsername: '@duylamjunpio',
   defaultCountryCode: '84',
 } as const;
 

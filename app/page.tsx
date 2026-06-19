@@ -986,7 +986,7 @@ export default function Home() {
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div>
                     <a
-                      href="https://instagram.com"
+                      href="https://www.instagram.com/sunprime.danang/"
                       target="_blank"
                       rel="noreferrer"
                       className="mb-3 inline-flex items-center gap-2 text-base font-semibold text-white hover:text-white/80"
@@ -1018,7 +1018,7 @@ export default function Home() {
 
                   <div>
                     <a
-                      href="https://facebook.com"
+                      href="https://www.facebook.com/profile.php?id=61586874073145&locale=vi_VN"
                       target="_blank"
                       rel="noreferrer"
                       className="mb-3 inline-flex items-center gap-2 text-base font-semibold text-white hover:text-white/80"
@@ -1051,7 +1051,7 @@ export default function Home() {
 
                 <div className="mt-4">
                   <a
-                    href="https://www.tiktok.com"
+                    href="https://www.tiktok.com/@sun.prime0"
                     target="_blank"
                     rel="noreferrer"
                     className="mb-3 inline-flex items-center gap-2 text-base font-semibold text-white hover:text-white/80"

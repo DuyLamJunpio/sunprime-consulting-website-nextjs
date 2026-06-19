@@ -10,8 +10,8 @@ export const siteConfig = {
     "SunPrime Consulting đồng hành doanh nghiệp về pháp lý, kế toán và vận hành để xây nền tảng chuẩn luật, rõ số, vững hệ thống.",
   locale: "vi_VN",
   taxId: "0402296727",
-  phone: "+84938168168",
-  email: "hello@sunprime.consulting",
+  phone: "+84914699877",
+  email: "giangtran.sunprime@gmail.com",
   address: {
     street: "Tầng 6, Toà nhà dầu khí, Số 2 đường 30-4",
     district: "Phường Hoà Cường",
@@ -24,9 +24,9 @@ export const siteConfig = {
   // Cổng dịch vụ B2B cho khách hàng doanh nghiệp.
   portalUrl: process.env.NEXT_PUBLIC_PORTAL_URL ?? "https://portal.sunprime.vn",
   social: {
-    facebook: "https://facebook.com",
-    instagram: "https://instagram.com",
-    tiktok: "https://www.tiktok.com",
+    facebook: "https://www.facebook.com/profile.php?id=61586874073145&locale=vi_VN",
+    instagram: "https://www.instagram.com/sunprime.danang/",
+    tiktok: "https://www.tiktok.com/@sun.prime0",
   },
 } as const;
 

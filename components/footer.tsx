@@ -65,13 +65,13 @@ export default function SiteFooter() {
             <ul className="space-y-4 text-[15px] font-medium text-text-muted">
               <li>{address}</li>
               <li>
-                <a href="tel:+84938168168" className="transition-colors hover:text-brand">
-                  0938 168 168
+                <a href="tel:+84914699877" className="transition-colors hover:text-brand">
+                  0914 699 877
                 </a>
               </li>
               <li>
-                <a href="mailto:hello@sunprime.consulting" className="transition-colors hover:text-brand">
-                  hello@sunprime.consulting
+                <a href="mailto:giangtran.sunprime@gmail.com" className="transition-colors hover:text-brand">
+                  giangtran.sunprime@gmail.com
                 </a>
               </li>
             </ul>
@@ -113,17 +113,17 @@ export default function SiteFooter() {
           <div>
             <h3 className="mb-6 font-semibold tracking-tight text-text-primary">{t.follow}</h3>
             <div className="flex gap-4 text-text-secondary">
-              <a href="https://facebook.com" target="_blank" rel="noreferrer" className="p-1 transition-colors hover:text-brand">
+              <a href="https://www.facebook.com/profile.php?id=61586874073145&locale=vi_VN" target="_blank" rel="noreferrer" className="p-1 transition-colors hover:text-brand">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
                 </svg>
               </a>
-              <a href="https://www.tiktok.com" target="_blank" rel="noreferrer" className="p-1 transition-colors hover:text-brand">
+              <a href="https://www.tiktok.com/@sun.prime0" target="_blank" rel="noreferrer" className="p-1 transition-colors hover:text-brand">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M16.7 3c.3 1.7 1.3 3 2.9 3.8V9c-1.3 0-2.6-.4-3.7-1.1v6.1a5.7 5.7 0 1 1-4.9-5.6v2.3a3.4 3.4 0 1 0 2.6 3.3V3z" />
                 </svg>
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="p-1 transition-colors hover:text-brand">
+              <a href="https://www.instagram.com/sunprime.danang/" target="_blank" rel="noreferrer" className="p-1 transition-colors hover:text-brand">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"

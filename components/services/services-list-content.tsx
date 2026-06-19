@@ -42,7 +42,7 @@ export default function ServicesListContent() {
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-white/80">{t.heroDesc}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
-              href="tel:+84988412965"
+              href="tel:+84914699877"
               className="inline-flex items-center gap-2 rounded-lg bg-surface-base px-6 py-3 text-sm font-semibold text-brand transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-soft"
             >
               {t.consultNow}
@@ -214,19 +214,19 @@ export default function ServicesListContent() {
               <p className="mt-3 text-sm leading-relaxed text-white/80">{t.readyDesc}</p>
               <div className="mt-6 space-y-3">
                 <a
-                  href="mailto:hello@sunprime.consulting"
+                  href="mailto:giangtran.sunprime@gmail.com"
                   className="flex items-center justify-between rounded-2xl border border-white/35 bg-white/10 px-4 py-3 text-sm font-medium text-white transition hover:bg-white/20"
                 >
-                  hello@sunprime.consulting
+                  giangtran.sunprime@gmail.com
                   <iconify-icon icon="solar:arrow-right-up-linear" width={16} />
                 </a>
                 <a
-                  href="https://zalo.me/0988412965"
+                  href="https://zalo.me/0914699877"
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center justify-between rounded-2xl border border-white/35 bg-white/10 px-4 py-3 text-sm font-medium text-white transition hover:bg-white/20"
                 >
-                  Zalo: 0988 412 965
+                  Zalo: 0914 699 877
                   <iconify-icon icon="solar:chat-round-bold" width={16} />
                 </a>
               </div>
