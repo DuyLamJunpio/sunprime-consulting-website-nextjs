@@ -39,12 +39,27 @@ export type NewsPost = {
   readTime: string;
 };
 
-const NEWS_API_URL =
-  process.env.SUNPRIME_NEWS_API_URL ?? 'http://localhost:2412/api/news';
+// Base URL của backend. Mặc định trỏ thẳng về API production (api.sunprime.vn).
+// Override khi cần (vd dev local: SUNPRIME_API_BASE_URL=http://localhost:2412).
+const API_BASE_URL = (process.env.SUNPRIME_API_BASE_URL ?? 'https://api.sunprime.vn').replace(
+  /\/$/,
+  ''
+);
 
-const NEWS_API_TOKEN =
-  process.env.SUNPRIME_NEWS_API_TOKEN ??
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0IiwiY29tcGFueUlkIjpudWxsLCJyb2xlSWQiOm51bGwsInVzZXJBY2Nlc3NUeXBlIjoiU1lTVEVNIiwiaWF0IjoxNzcwMzAyMDY0LCJleHAiOjE4NjAzMDIwNjR9.HdkCB7h5ytAdrnTZ7cIR9Ke2pkqiAxgF23Okw9O0ZK4';
+const NEWS_API_URL =
+  process.env.SUNPRIME_NEWS_API_URL ?? `${API_BASE_URL}/api/news/landing`;
+
+// Token TUỲ CHỌN — endpoint news production là public, không cần token.
+// Chỉ set SUNPRIME_NEWS_API_TOKEN khi backend yêu cầu (vd backend nội bộ khi dev).
+const NEWS_API_TOKEN = process.env.SUNPRIME_NEWS_API_TOKEN;
+
+const buildNewsHeaders = (): Record<string, string> => {
+  const headers: Record<string, string> = { Accept: '*/*' };
+  if (NEWS_API_TOKEN) {
+    headers.Authorization = `Bearer ${NEWS_API_TOKEN}`;
+  }
+  return headers;
+};
 
 const toSlug = (text: string) =>
   text
@@ -56,8 +71,21 @@ const toSlug = (text: string) =>
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');
 
-const estimateReadTime = (content: string) => {
-  const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
+// Content từ API là HTML — bóc tag để lấy text thuần cho excerpt và đếm chữ.
+const stripHtml = (html: string) =>
+  html
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const estimateReadTime = (plainText: string) => {
+  const wordCount = plainText.trim().split(/\s+/).filter(Boolean).length;
   const minutes = Math.max(1, Math.ceil(wordCount / 220));
   return `${minutes} phút đọc`;
 };
@@ -79,34 +107,33 @@ const extractImage = (item: NewsApiItem) => {
 
 const toNewsPost = (item: NewsApiItem): NewsPost => {
   const publishedAt = item.published_at ?? item.created_at ?? new Date().toISOString();
-  const content = item.content?.trim() ?? '';
+  const content = item.content?.trim() ?? ''; // HTML thô, dùng render trang chi tiết
+  const plainText = stripHtml(content); // text thuần cho excerpt / read time
   const slugBase = toSlug(item.title || `tin-tuc-${item.news_id}`);
+  const pinnedOrderRaw = Number(item.pinned_order);
 
   return {
     id: item.news_id,
     slug: `${slugBase}-${item.news_id}`,
     title: item.title || 'Bài viết',
     content,
-    excerpt: content.length > 180 ? `${content.slice(0, 177)}...` : content,
+    excerpt: plainText.length > 180 ? `${plainText.slice(0, 177)}...` : plainText,
     category: 'Tin tức SunPrime',
     author: 'Ban biên tập SunPrime',
     tags: ['Tin tức'],
     image: extractImage(item),
     isPinned: Boolean(item.is_pinned),
-    pinnedOrder: typeof item.pinned_order === 'number' ? item.pinned_order : null,
+    pinnedOrder: Number.isFinite(pinnedOrderRaw) ? pinnedOrderRaw : null,
     publishedAt,
-    readTime: estimateReadTime(content),
+    readTime: estimateReadTime(plainText),
   };
 };
 
-export const fetchNewsPage = async (skip = 0, limit = 10) => {
-  const url = `${NEWS_API_URL}?skip=${skip}&limit=${limit}`;
+export const fetchNewsPage = async (skip = 0) => {
+  const url = `${NEWS_API_URL}?skip=${skip}`;
   const response = await fetch(url, {
     method: 'GET',
-    headers: {
-      Authorization: `Bearer ${NEWS_API_TOKEN}`,
-      Accept: '*/*',
-    },
+    headers: buildNewsHeaders(),
     cache: 'no-store',
   });
 
@@ -125,17 +152,43 @@ export const fetchNewsPage = async (skip = 0, limit = 10) => {
   };
 };
 
+const TOP_NEWS_URL =
+  process.env.SUNPRIME_TOP_NEWS_API_URL ?? `${API_BASE_URL}/api/news/landing/top-news`;
+
+export const fetchTopNews = async (): Promise<NewsPost[]> => {
+  try {
+    const response = await fetch(TOP_NEWS_URL, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${NEWS_API_TOKEN}`,
+        Accept: '*/*',
+      },
+      cache: 'no-store',
+    });
+
+    if (!response.ok) return [];
+
+    const payload = (await response.json()) as NewsApiResponse;
+    const items = Array.isArray(payload.data) ? payload.data : [];
+
+    return items.filter((item) => item.is_published).map(toNewsPost);
+  } catch {
+    return [];
+  }
+};
+
+const PAGE_SIZE = 12;
+
 export const fetchAllNewsPosts = async () => {
   const allPosts: NewsPost[] = [];
   let skip = 0;
-  const limit = 20;
   const maxPages = 10;
 
   for (let page = 0; page < maxPages; page += 1) {
-    const { posts, hasMore } = await fetchNewsPage(skip, limit);
+    const { posts, hasMore } = await fetchNewsPage(skip);
     allPosts.push(...posts);
     if (!hasMore) break;
-    skip += limit;
+    skip += PAGE_SIZE;
   }
 
   return allPosts.sort(

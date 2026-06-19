@@ -1,0 +1,11 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="675" fill="#F3F4F6"/>
+  <rect x="220" y="142" width="760" height="392" rx="24" fill="#E5E7EB"/>
+  <rect x="300" y="222" width="600" height="18" rx="9" fill="#9CA3AF"/>
+  <rect x="300" y="258" width="460" height="18" rx="9" fill="#9CA3AF"/>
+  <rect x="300" y="330" width="240" height="82" rx="12" fill="#D1D5DB"/>
+  <path d="M338 384L388 334L430 374L480 324L526 370V410H338V384Z" fill="#9CA3AF"/>
+  <circle cx="500" cy="352" r="14" fill="#F3F4F6"/>
+  <text x="600" y="482" text-anchor="middle" fill="#6B7280" font-family="Arial, sans-serif" font-size="34" font-weight="700">KHONG CO ANH</text>
+  <text x="600" y="516" text-anchor="middle" fill="#9CA3AF" font-family="Arial, sans-serif" font-size="22">No image available</text>
+</svg>

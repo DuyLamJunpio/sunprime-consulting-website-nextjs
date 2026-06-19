@@ -20,6 +20,16 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'sunprime.vn',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.sunprime.vn',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
         hostname: 'logo.clearbit.com',
         pathname: '**',
       },
@@ -41,6 +51,11 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'flagcdn.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
         pathname: '**',
       },
     ],

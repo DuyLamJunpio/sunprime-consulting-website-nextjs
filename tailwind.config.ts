@@ -31,20 +31,21 @@ const config: Config = {
          * ============================================================
          */
         brand: {
-          DEFAULT: "#D97706", // màu chủ đạo chính
-          strong: "#B45309", // hover/active cho màu chủ đạo
-          soft: "#FFFBEB", // nền nhấn nhẹ
-          "soft-hover": "#FEF3C7", // hover cho nền nhấn nhẹ
-          ring: "#FDE68A", // ring/focus/outline nhấn
-          ink: "#78350F", // chữ/biểu tượng trên nền brand mềm
+          // Toàn bộ suy ra từ --brand-base (xem globals.css). Đổi 1 biến đó là đổi cả web.
+          DEFAULT: "var(--color-brand)", // màu chủ đạo chính
+          strong: "var(--color-brand-strong)", // hover/active cho màu chủ đạo
+          soft: "var(--color-brand-soft)", // nền nhấn nhẹ
+          "soft-hover": "var(--color-brand-soft-hover)", // hover cho nền nhấn nhẹ
+          ring: "var(--color-brand-ring)", // ring/focus/outline nhấn
+          ink: "var(--color-brand-ink)", // chữ/biểu tượng trên nền brand mềm
         },
         text: {
           primary: "#0F172A", // heading/chữ quan trọng
           secondary: "#475569", // nội dung mặc định
           muted: "#64748B", // mô tả/chú thích
           inverse: "#FFFFFF", // chữ trên nền tối
-          link: "#D97706", // màu link mặc định
-          "link-hover": "#B45309", // màu link hover
+          link: "var(--color-brand)", // màu link mặc định
+          "link-hover": "var(--color-brand-strong)", // màu link hover
         },
         surface: {
           base: "#FFFFFF", // nền trang chính
@@ -54,15 +55,15 @@ const config: Config = {
           elevated: "#FFFFFF", // nền khối nổi (modal/dropdown)
         },
         section: {
-          primary: "#D97706", // section màu thương hiệu đậm
+          primary: "var(--color-brand)", // section màu thương hiệu đậm
           alt: "#F8FAFC", // section màu thay thế trung tính
           "grad-start": "#FEF3C7", // gradient section sáng - điểm đầu
           "grad-mid": "#FDE68A", // gradient section sáng - điểm giữa
           "grad-end": "#FCD34D", // gradient section sáng - điểm cuối
         },
         button: {
-          primary: "#D97706", // nút chính
-          "primary-hover": "#B45309",
+          primary: "var(--color-brand)", // nút chính
+          "primary-hover": "var(--color-brand-strong)",
           secondary: "#FFFBEB", // nút phụ
           "secondary-hover": "#FEF3C7",
           ghost: "#FFFFFF", // nền nút ghost trên nền trắng
@@ -80,6 +81,17 @@ const config: Config = {
           success: "#10B981",
           warning: "#F59E0B",
           danger: "#F43F5E",
+        },
+
+        /**
+         * Màu phụ (accent) — xanh rêu/sage, bổ trợ cho tông nâu đất.
+         * Dùng cho điểm nhấn phụ, badge, icon phụ để tạo cảm giác cao cấp & tin cậy.
+         */
+        accent: {
+          DEFAULT: "#3F5E52",
+          strong: "#2F463D",
+          soft: "#EEF3F0",
+          ink: "#22332C",
         },
 
         /**
@@ -124,6 +136,15 @@ const config: Config = {
           100: "#FEE2E2",
           600: "#DC2626",
         },
+      },
+      boxShadow: {
+        soft: "var(--shadow-soft)",
+        "soft-lg": "var(--shadow-soft-lg)",
+        "soft-xl": "var(--shadow-soft-xl)",
+        "brand-glow": "var(--shadow-brand-glow)",
+      },
+      borderRadius: {
+        "4xl": "2rem",
       },
       animation: {
         marquee: "marquee 40s linear infinite",

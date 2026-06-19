@@ -1,3 +1,5 @@
+import type { Lang } from "@/lib/i18n/messages";
+
 export type ServiceStat = {
   label: string;
   value: string;
@@ -317,4 +319,293 @@ export const allServices: FlattenedService[] = serviceCategories.flatMap((catego
 
 export const serviceSlugs = allServices.map((service) => service.slug);
 
-export const getServiceBySlug = (slug: string) => allServices.find((service) => service.slug === slug);
+/**
+ * Bản tiếng Anh — giữ NGUYÊN id/slug/accent/icon, chỉ dịch nội dung.
+ * Dùng qua getServiceCategories(lang)/getServiceBySlug(slug, lang).
+ */
+export const serviceCategoriesEn: ServiceCategory[] = [
+  {
+    id: 'ke-toan',
+    title: 'Accounting',
+    summary: 'Run an outsourced accounting department with transparent processes.',
+    description: 'From bookkeeping and tax filing to accounting risk control.',
+    accent: 'from-amber-200/70 via-orange-100/70 to-yellow-100/80',
+    icon: 'solar:bill-list-bold-duotone',
+    services: [
+      {
+        slug: 'ke-toan-tron-goi',
+        title: 'Full-service accounting for households & businesses',
+        shortDescription: 'Outsource your entire accounting department with periodic reporting.',
+        heroDescription: 'Deploy an outsourced accounting department to VAS standards, operated under a clear SLA.',
+        excerpt: 'A full-service accounting solution that helps businesses optimize costs and control their numbers.',
+        stats: [
+          { label: 'Setup time', value: '3-5 days' },
+          { label: 'Reporting cycle', value: 'Weekly / Monthly' },
+        ],
+        benefits: ['Optimize accounting staff costs', 'Transparent periodic reporting', 'Standardized document workflow'],
+        deliverables: ['Set up the chart of accounts', 'Record transactions', 'Reconcile payables and bank accounts'],
+        process: [
+          { title: 'Survey', description: 'Assess data and operational needs.' },
+          { title: 'Setup', description: 'Standardize processes and document templates.' },
+          { title: 'Operate', description: 'Bookkeeping and periodic reporting per the SLA.' },
+        ],
+      },
+      {
+        slug: 'ke-khai-va-quyet-toan-thue',
+        title: 'VAT, PIT & CIT filing and finalization',
+        shortDescription: 'On-time filing, compliant dossiers and explanation support.',
+        heroDescription: 'Ensure your business files on time and finalizes correctly under current regulations.',
+        excerpt: 'Tax filing and finalization services that reduce the risk of late-payment penalties.',
+        stats: [
+          { label: 'Deadline reminders', value: '100%' },
+          { label: 'Processing time', value: '1-2 days/period' },
+        ],
+        benefits: ['Never miss a filing deadline', 'Support during inspections', 'Stay updated on new tax policies'],
+        deliverables: ['Prepare VAT/PIT/CIT returns', 'Submit dossiers electronically', 'Prepare finalization files'],
+        process: [
+          { title: 'Review', description: 'Check invoice data and tax entries.' },
+          { title: 'File', description: 'Prepare and submit returns on time.' },
+          { title: 'Finalize', description: 'Complete dossiers and provide explanations when needed.' },
+        ],
+      },
+      {
+        slug: 'lap-so-sach-chuan-muc',
+        title: 'Bookkeeping to accounting standards',
+        shortDescription: 'Standardize your books for audit and management purposes.',
+        heroDescription: 'Clean up data and build standard accounting books so your business can operate with confidence.',
+        excerpt: 'Complete bookkeeping in line with standards and current regulations.',
+        stats: [
+          { label: 'Completion time', value: '15-30 days' },
+          { label: 'Scope', value: '12-24 months of data' },
+        ],
+        benefits: ['Clean, controllable figures', 'Audit-ready', 'Reduced risk of discrepancies'],
+        deliverables: ['Classify documents', 'Prepare journals and detailed ledgers', 'Reconcile consolidated figures'],
+        process: [
+          { title: 'Collect', description: 'Receive related data and documents.' },
+          { title: 'Record', description: 'Prepare detailed and general ledgers.' },
+          { title: 'Hand over', description: 'Deliver the books and provide usage guidance.' },
+        ],
+      },
+      {
+        slug: 'bao-cao-tai-chinh-dinh-ky',
+        title: 'Monthly / quarterly / annual financial statements',
+        shortDescription: 'Clear financial and management reports for leadership.',
+        heroDescription: 'Set up clear periodic reporting for fast, accurate decision-making.',
+        excerpt: 'Periodic financial statements meeting both legal and management needs.',
+        stats: [
+          { label: 'Update cycle', value: 'Monthly / Quarterly' },
+          { label: 'Delivery', value: '72h after closing' },
+        ],
+        benefits: ['Easy to read and act on', 'Track key KPIs', 'Support financial planning'],
+        deliverables: ['Statutory financial statements', 'Management dashboard', 'Trend analysis report'],
+        process: [
+          { title: 'Define KPIs', description: 'Agree on the key management metrics.' },
+          { title: 'Build reports', description: 'Standardize data and build the reports.' },
+          { title: 'Present', description: 'Advise on actions based on the numbers.' },
+        ],
+      },
+      {
+        slug: 'dai-dien-co-quan-thue',
+        title: 'Representation before tax authorities',
+        shortDescription: 'Represent your business in tax meetings, inspections and explanations.',
+        heroDescription: 'Stand with your business during working sessions with the tax authorities.',
+        excerpt: 'Reduce pressure and risk during tax inspections.',
+        stats: [
+          { label: 'Dossier completion rate', value: '98%' },
+          { label: 'Response time', value: '<24h' },
+        ],
+        benefits: ['Complete, compliant dossiers', 'Strategic explanations', 'Save leadership time'],
+        deliverables: ['Draft official letters', 'Represent in meetings', 'Track resolution outcomes'],
+        process: [
+          { title: 'Prepare', description: 'Review requirements and related dossiers.' },
+          { title: 'Engage', description: 'Represent the business with the tax authority.' },
+          { title: 'Complete', description: 'Summarize conclusions and preventive recommendations.' },
+        ],
+      },
+      {
+        slug: 'ra-soat-rui-ro-ke-toan-thue',
+        title: 'Accounting & tax risk review and remediation',
+        shortDescription: 'Independent assessment of your accounting system with early risk alerts.',
+        heroDescription: 'A comprehensive review to detect and fix discrepancies before they trigger back-taxes.',
+        excerpt: 'Review accounting and tax risks with an in-depth checklist.',
+        stats: [
+          { label: 'Review criteria', value: '72 points' },
+          { label: 'Duration', value: '7-12 days' },
+        ],
+        benefits: ['Detect errors early', 'A clear remediation roadmap', 'Stronger internal controls'],
+        deliverables: ['Risk report', 'List of adjusting entries', '30-60-90 action plan'],
+        process: [
+          { title: 'Collect', description: 'Interview and sample data.' },
+          { title: 'Assess', description: 'Score risks by group.' },
+          { title: 'Remediate', description: 'Hand over the plan and monitor execution.' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'thanh-lap',
+    title: 'Company formation',
+    summary: 'Set up a proper legal foundation from day one of operations.',
+    description: 'Advice on entity type, legal dossiers and mandatory post-formation procedures.',
+    accent: 'from-neutral-200/70 via-stone-100/80 to-white',
+    icon: 'solar:notebook-bookmark-bold-duotone',
+    services: [
+      {
+        slug: 'tu-van-thanh-lap-doanh-nghiep',
+        title: 'Advisory on forming a household business / company',
+        shortDescription: 'Advice on the right legal model and end-to-end dossier handling.',
+        heroDescription: 'From choosing the entity type to obtaining the business license.',
+        excerpt: 'Full-service company formation advisory.',
+        stats: [
+          { label: 'Processing time', value: '3-5 days' },
+          { label: 'Signing', value: '01 dossier set' },
+        ],
+        benefits: ['Choose the right entity type', 'Shorten processing time', 'Reduce procedural risk'],
+        deliverables: ['Entity-type advice', 'Draft registration dossier', 'Submit and track results'],
+        process: [
+          { title: 'Advise', description: 'Analyze needs and select the right model.' },
+          { title: 'Draft dossier', description: 'Prepare the complete legal dossier.' },
+          { title: 'Hand over', description: 'Receive results and guide the next steps.' },
+        ],
+      },
+      {
+        slug: 'soan-thao-ho-so-phap-ly',
+        title: 'Drafting complete legal dossiers',
+        shortDescription: 'Standardize your legal documents and internal templates.',
+        heroDescription: 'Design an internal legal document set so your business operates safely.',
+        excerpt: 'Drafting complete legal dossiers for new businesses.',
+        stats: [
+          { label: 'Templates delivered', value: '15+' },
+          { label: 'Duration', value: '5 working days' },
+        ],
+        benefits: ['Enough documents to work with partners', 'Reduce legal risk', 'Easy to use in operations'],
+        deliverables: ['Charter and resolutions', 'Internal templates', '90-day legal checklist'],
+        process: [
+          { title: 'Collect', description: 'Receive business information.' },
+          { title: 'Draft', description: 'Standardize the document set to your needs.' },
+          { title: 'Hand over', description: 'Guide usage and provide periodic updates.' },
+        ],
+      },
+      {
+        slug: 'tu-van-van-hanh-quan-tri-ban-dau',
+        title: 'Initial operating model & management advisory',
+        shortDescription: 'Design the org chart, processes and foundational KPIs.',
+        heroDescription: 'Design an initial operating model so your business can scale easily.',
+        excerpt: 'Operations and management advisory for the startup stage.',
+        stats: [
+          { label: 'Advisory time', value: '2 weeks' },
+          { label: 'Output', value: '8 core processes' },
+        ],
+        benefits: ['Clear roles and responsibilities', 'Standardized processes', 'Measurable KPIs'],
+        deliverables: ['Org chart', 'RACI matrix', 'Set of operating processes'],
+        process: [
+          { title: 'Survey', description: 'Assess the current operating model.' },
+          { title: 'Design', description: 'Propose structure, processes and KPIs.' },
+          { title: 'Deploy', description: 'Guide adoption and provide initial advisory.' },
+        ],
+      },
+      {
+        slug: 'dang-ky-thue-hoa-don-dien-tu-tai-khoan-ngan-hang',
+        title: 'Tax registration, e-invoices and bank accounts',
+        shortDescription: 'A full package of mandatory post-formation procedures.',
+        heroDescription: 'Complete initial tax procedures and activate your business transaction systems.',
+        excerpt: 'Initial tax registration, e-invoices and bank accounts.',
+        stats: [
+          { label: 'Completion time', value: '5-7 days' },
+          { label: 'Parallel procedures', value: '03 procedures' },
+        ],
+        benefits: ['No missed initial obligations', 'Fast e-invoice activation', 'Ready to transact'],
+        deliverables: ['Initial tax registration', 'Invoice issuance notice', 'Bank account opening support'],
+        process: [
+          { title: 'Plan', description: 'Set the procedure timeline by milestone.' },
+          { title: 'Submit', description: 'Submit dossiers and track their status.' },
+          { title: 'Hand over', description: 'Deliver accounts, invoices and usage guidance.' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'nhan-su',
+    title: 'Human resources',
+    summary: 'Set up the foundation for HR, insurance and personal income tax.',
+    description: 'Standardize labor records and insurance and tax obligations for employees.',
+    accent: 'from-emerald-200/70 via-teal-100/80 to-green-100/70',
+    icon: 'solar:users-group-two-rounded-bold-duotone',
+    services: [
+      {
+        slug: 'tu-van-ke-khai-bhxh-bhyt-bhtn',
+        title: 'Social, health & unemployment insurance advisory and filing',
+        shortDescription: 'Set up and run insurance records for your staff.',
+        heroDescription: 'File insurance on time, for the right people, in sync with your HR data.',
+        excerpt: 'Full-service management of social, health and unemployment insurance records.',
+        stats: [
+          { label: 'Processing time', value: '1-3 days' },
+          { label: 'On time', value: '100%' },
+        ],
+        benefits: ['Reduce late-filing penalties', 'Track workforce changes', 'Optimize the insurance process'],
+        deliverables: ['File headcount increases/decreases', 'Track insurance contributions', 'Support benefit procedures'],
+        process: [
+          { title: 'Setup', description: 'Register the unit code and transaction account.' },
+          { title: 'File', description: 'Prepare monthly increase/decrease dossiers.' },
+          { title: 'Monitor', description: 'Reconcile and handle issues that arise.' },
+        ],
+      },
+      {
+        slug: 'hop-dong-lao-dong-noi-quy-thang-luong',
+        title: 'Labor contracts - work rules - salary scales',
+        shortDescription: 'Build a legally compliant labor document set.',
+        heroDescription: 'Design a complete labor legal framework for operations and proper registration.',
+        excerpt: 'Standardize contracts, work rules and salary scales.',
+        stats: [
+          { label: 'Setup time', value: '7 days' },
+          { label: 'Templates delivered', value: '10+' },
+        ],
+        benefits: ['Fewer labor disputes', 'Meet legal requirements', 'Easy internal rollout'],
+        deliverables: ['Contract templates', 'Labor work rules', 'Salary scale and registration dossier'],
+        process: [
+          { title: 'Survey', description: 'Assess current labor policies.' },
+          { title: 'Draft', description: 'Build the standardized document set.' },
+          { title: 'Apply', description: 'Guide rollout and registration.' },
+        ],
+      },
+      {
+        slug: 'quyet-toan-thue-tncn',
+        title: 'Personal income tax finalization for employees',
+        shortDescription: 'Complete PIT finalization for the company and its employees.',
+        heroDescription: 'Review payroll data and finalize PIT accurately and on time.',
+        excerpt: 'Full-service personal income tax finalization for employees.',
+        stats: [
+          { label: 'Processing time', value: '5-7 days/period' },
+          { label: 'Scope', value: 'Unlimited headcount' },
+        ],
+        benefits: ['Reduce back-tax risk', 'Secure deduction entitlements', 'Online submission support'],
+        deliverables: ['Review payroll', 'Prepare form 05/QTT-TNCN', 'Track processing status'],
+        process: [
+          { title: 'Reconcile', description: 'Standardize income and deduction data.' },
+          { title: 'File', description: 'Prepare returns and submit for approval.' },
+          { title: 'Complete', description: 'Submit dossiers and update results.' },
+        ],
+      },
+    ],
+  },
+];
+
+const allServicesEn: FlattenedService[] = serviceCategoriesEn.flatMap((category) =>
+  category.services.map((service) => ({
+    ...service,
+    categoryId: category.id,
+    categoryTitle: category.title,
+    categorySummary: category.description,
+    categoryAccent: category.accent,
+  }))
+);
+
+/** Trả về danh mục dịch vụ theo ngôn ngữ. */
+export const getServiceCategories = (lang: Lang = 'vi') =>
+  lang === 'en' ? serviceCategoriesEn : serviceCategories;
+
+/** Trả về danh sách dịch vụ phẳng theo ngôn ngữ. */
+export const getAllServices = (lang: Lang = 'vi') => (lang === 'en' ? allServicesEn : allServices);
+
+export const getServiceBySlug = (slug: string, lang: Lang = 'vi') =>
+  getAllServices(lang).find((service) => service.slug === slug);

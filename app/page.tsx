@@ -1,41 +1,193 @@
 'use client';
-import { newsArticles } from "@/data/news";
-import { allServices, serviceCategories } from "@/data/services";
+import { useI18n } from "@/components/i18n-provider";
+import type { NewsPost } from "@/data/news-api";
+import { getAllServices, getServiceCategories } from "@/data/services";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 export default function Home() {
+  const { lang } = useI18n();
   // --- LOGIC STATES ---
   const featuredServiceCards = [
-    ...allServices.filter((service) => service.categoryId === "ke-toan").slice(0, 3),
-    ...allServices.filter((service) => service.categoryId === "thanh-lap").slice(0, 3),
+    ...getAllServices(lang).filter((service) => service.categoryId === "ke-toan").slice(0, 3),
+    ...getAllServices(lang).filter((service) => service.categoryId === "thanh-lap").slice(0, 3),
   ];
-  const serviceTopicItems = allServices.map((service) => ({
-    title: service.title,
-    desc: service.shortDescription,
-    slug: service.slug,
-    icon:
-      service.categoryId === "ke-toan"
-        ? "banknote"
-        : service.categoryId === "thanh-lap"
-          ? "building-2"
-          : "users",
-  }));
   const heroServiceCategories = useMemo(
     () =>
       ["ke-toan", "thanh-lap", "nhan-su"]
-        .map((categoryId) => serviceCategories.find((category) => category.id === categoryId))
+        .map((categoryId) => getServiceCategories(lang).find((category) => category.id === categoryId))
         .filter((category): category is NonNullable<typeof category> => Boolean(category)),
-    []
+    [lang]
   );
+  const [newsArticles, setNewsArticles] = useState<NewsPost[]>([]);
+  useEffect(() => {
+    fetch('/api/top-news')
+      .then((res) => res.json())
+      .then((data) => { if (Array.isArray(data)) setNewsArticles(data); })
+      .catch(() => {});
+  }, []);
   const [heroUpdateIndex, setHeroUpdateIndex] = useState(0);
-  const heroUpdates = [
-    "Tuần này SunPrime hoàn tất 24 bộ hồ sơ thuế cho khối F&B.",
-    "Thêm 12 doanh nghiệp mới ký gói kế toán trọn gói trong tháng.",
-    "Cập nhật checklist pháp lý 2026 cho 3 nhóm ngành trọng điểm.",
-    "Đội ngũ đã hỗ trợ 37 phiên giải trình cùng cơ quan thuế quý này.",
-  ];
+  const heroUpdates = lang === "vi"
+    ? [
+      "Tuần này SunPrime hoàn tất 24 bộ hồ sơ thuế cho khối F&B.",
+      "Thêm 12 doanh nghiệp mới ký gói kế toán trọn gói trong tháng.",
+      "Cập nhật checklist pháp lý 2026 cho 3 nhóm ngành trọng điểm.",
+      "Đội ngũ đã hỗ trợ 37 phiên giải trình cùng cơ quan thuế quý này.",
+    ]
+    : [
+      "This week SunPrime completed 24 tax dossiers for F&B clients.",
+      "12 new businesses signed our full accounting package this month.",
+      "2026 legal compliance checklist has been updated for 3 key industries.",
+      "Our team has supported 37 tax clarification sessions this quarter.",
+    ];
+  const heroCategoryLabels: Record<string, string> = lang === "vi"
+    ? {
+      "ke-toan": "Kế toán",
+      "thanh-lap": "Thành lập doanh nghiệp",
+      "nhan-su": "Nhân sự",
+    }
+    : {
+      "ke-toan": "Accounting",
+      "thanh-lap": "Business Setup",
+      "nhan-su": "Human Resources",
+    };
+
+  // Chuỗi giao diện trang chủ theo ngôn ngữ.
+  const th = lang === "vi"
+    ? {
+      trustedBy: "Những khách hàng đã tin tưởng chúng tôi",
+      servicesTitle: "Dịch vụ của chúng tôi",
+      servicesDesc:
+        "Chúng tôi đồng hành cùng doanh nghiệp bạn thông qua những chiến lược tài chính và pháp lý tối ưu, được đo ni đóng giày cho từng mục tiêu cụ thể.",
+      allServicesCard: "Tất cả dịch vụ",
+      learnMore: "Tìm hiểu thêm",
+      processEyebrow: "Quy trình làm việc",
+      processTitle:
+        "Chúng tôi triển khai theo 4 bước rõ ràng, minh bạch và đồng hành xuyên suốt cùng doanh nghiệp.",
+      stepLabel: "Bước",
+      whyTitle: "Vì sao khách hàng chọn chúng tôi",
+      whyDesc:
+        "Giải pháp của SunPrime tập trung vào tính thực tiễn, kết quả đo lường được và đồng hành dài hạn cùng doanh nghiệp.",
+      commitResponsibility: "Cam kết trách nhiệm",
+      commitCost: "Cam kết chi phí",
+      teamEyebrow: "Đội ngũ của chúng tôi",
+      teamTitle: "Đội ngũ chuyên gia đồng hành cùng doanh nghiệp tăng trưởng bền vững",
+      teamDesc:
+        "Mỗi thành viên tại SunPrime đều có kinh nghiệm thực chiến trong kế toán, pháp lý và vận hành doanh nghiệp. Chúng tôi phối hợp như một đội ngũ nội bộ mở rộng, giúp bạn giải quyết đúng vấn đề và triển khai hiệu quả ngay từ đầu.",
+      teamCta: "Liên hệ đội ngũ tư vấn",
+      industriesEyebrow: "Ngành đã hợp tác",
+      industriesTitle: "Những lĩnh vực chúng tôi đã đồng hành",
+      industriesDesc:
+        "SunPrime đã tư vấn và triển khai cho doanh nghiệp ở nhiều lĩnh vực khác nhau, với giải pháp linh hoạt theo đặc thù từng ngành.",
+      companiesPartnered: "doanh nghiệp đã hợp tác",
+      connectBusinesses: "Kết nối đến các doanh nghiệp",
+      reviewsTitle: "Đánh giá của khách hàng dành cho chúng tôi",
+      newsTitle: "Bản tin SunPrime",
+      newsDesc:
+        "Cập nhật các bài viết mới về kế toán, pháp lý và vận hành doanh nghiệp từ đội ngũ SunPrime.",
+      viewAll: "Xem tất cả",
+      readMore: "Đọc tiếp",
+      ctaTitle: "Bạn cần tư vấn ngay?",
+      ctaDesc:
+        "Đội ngũ SunPrime sẵn sàng hỗ trợ doanh nghiệp về pháp lý, kế toán và vận hành với lộ trình rõ ràng, minh bạch ngay từ đầu.",
+      ctaButton: "Nhận tư vấn miễn phí",
+      reasons: [
+        {
+          title: "Hiểu sâu thực tế doanh nghiệp",
+          description:
+            "Chúng tôi bắt đầu từ việc đi sâu vào mô hình vận hành thực tế, dữ liệu hiện có và các điểm nghẽn đang xảy ra, để đề xuất đúng giải pháp doanh nghiệp cần thay vì áp dụng khuôn mẫu chung.",
+        },
+        {
+          title: "Không tư vấn lý thuyết, tập trung vào kết quả",
+          description:
+            "Mọi giải pháp đều gắn với chỉ số đo lường cụ thể như tiến độ hồ sơ, độ chính xác số liệu và hiệu quả vận hành, giúp doanh nghiệp nhìn thấy kết quả rõ ràng sau từng giai đoạn triển khai.",
+        },
+        {
+          title: "Đồng hành lâu dài, không làm dịch vụ cho xong",
+          description:
+            "SunPrime theo sát sau triển khai, hỗ trợ xử lý phát sinh và tối ưu liên tục để doanh nghiệp vận hành ổn định, giảm rủi ro và phát triển bền vững trong dài hạn.",
+        },
+      ],
+      commitResponsibilityItems: [
+        "Đúng luật - đúng hạn - đúng số liệu",
+        "Bảo mật tuyệt đối thông tin doanh nghiệp",
+        "Chịu trách nhiệm hồ sơ kế toán do Sun Prime thực hiện",
+        "Đồng hành và hỗ trợ khi phát sinh kiểm tra thuế",
+      ],
+      commitCostItems: [
+        "Báo giá trọn gói - rõ ràng - không phát sinh",
+        "Tư vấn đúng nhu cầu, không bán dư dịch vụ",
+        "Minh bạch ngay từ đầu",
+      ],
+    }
+    : {
+      trustedBy: "Trusted by our clients",
+      servicesTitle: "Our services",
+      servicesDesc:
+        "We accompany your business with optimized financial and legal strategies, tailored to each specific goal.",
+      allServicesCard: "All services",
+      learnMore: "Learn more",
+      processEyebrow: "How we work",
+      processTitle:
+        "We deliver in 4 clear, transparent steps and accompany your business throughout.",
+      stepLabel: "Step",
+      whyTitle: "Why clients choose us",
+      whyDesc:
+        "SunPrime's solutions focus on practicality, measurable results and long-term partnership with your business.",
+      commitResponsibility: "Our responsibility",
+      commitCost: "Our cost commitment",
+      teamEyebrow: "Our team",
+      teamTitle: "An expert team that helps businesses grow sustainably",
+      teamDesc:
+        "Every SunPrime member has hands-on experience in accounting, legal and business operations. We work as an extended in-house team, helping you solve the right problems and execute effectively from the start.",
+      teamCta: "Contact our advisory team",
+      industriesEyebrow: "Industries served",
+      industriesTitle: "The fields we have accompanied",
+      industriesDesc:
+        "SunPrime has advised and delivered for businesses across many industries, with flexible solutions tailored to each sector.",
+      companiesPartnered: "businesses partnered",
+      connectBusinesses: "Connect with these businesses",
+      reviewsTitle: "What our clients say about us",
+      newsTitle: "SunPrime Newsletter",
+      newsDesc:
+        "The latest articles on accounting, legal and business operations from the SunPrime team.",
+      viewAll: "View all",
+      readMore: "Read more",
+      ctaTitle: "Need advice right now?",
+      ctaDesc:
+        "The SunPrime team is ready to support your business in legal, accounting and operations with a clear, transparent roadmap from the start.",
+      ctaButton: "Get a free consultation",
+      reasons: [
+        {
+          title: "Deep understanding of your business",
+          description:
+            "We start by digging into your real operating model, existing data and current bottlenecks, to propose exactly what your business needs instead of applying a generic template.",
+        },
+        {
+          title: "No theoretical advice — focused on results",
+          description:
+            "Every solution is tied to concrete metrics such as dossier progress, data accuracy and operational efficiency, so your business sees clear results after each phase.",
+        },
+        {
+          title: "Long-term partnership, not just one-off service",
+          description:
+            "SunPrime stays close after rollout, helps handle issues and optimizes continuously so your business runs stably, reduces risk and grows sustainably over the long run.",
+        },
+      ],
+      commitResponsibilityItems: [
+        "Compliant - on time - accurate figures",
+        "Absolute confidentiality of business information",
+        "Accountable for accounting records done by SunPrime",
+        "Accompany and support during tax inspections",
+      ],
+      commitCostItems: [
+        "All-inclusive quote - clear - no surprises",
+        "Advise to your real needs, no over-selling",
+        "Transparent from the very start",
+      ],
+    };
+
   useEffect(() => {
     const intervalId = window.setInterval(() => {
       setHeroUpdateIndex((prev) => (prev + 1) % heroUpdates.length);
@@ -101,428 +253,173 @@ export default function Home() {
   };
 
 
-  const topLawyers = [
-    {
-      name: "Liv Russell",
-      role: "Family law lawyer",
-      reviews: 33,
-      expertise: "Agreement and Contract Law, Family Law, Merger and Acquisitions, Company.",
-      image:
-        "https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg",
-    },
-    {
-      name: "Magnus Lawsen",
-      role: "Business, Merger & Acquisition",
-      reviews: 19,
-      expertise: "Labour law, Agreement and Contract Law, Business Law, Merger and Acquisitions, Company.",
-      image:
-        "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200&h=200",
-    },
-    {
-      name: "Emilie Lingson",
-      role: "Start up lawyer",
-      reviews: 16,
-      expertise: "Start up, Fintech, Crypto, AI, Merger and Acquisitions, Design Agency, Digital marketing.",
-      image:
-        "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=200&h=200",
-    },
-    {
-      name: "Henry Twill",
-      role: "Labour law lawyer",
-      reviews: 52,
-      expertise: "Labour law, Agreement and Contract Law, Business Law, Merger and Acquisitions.",
-      image:
-        "https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg",
-    },
-    {
-      name: "Petter Ulfs",
-      role: "Public Procurement",
-      reviews: 27,
-      expertise: "Labour law, Agreement and Contract Law, Business Law, Merger and Acquisitions.",
-      image:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200&h=200",
-    },
-  ];
-
-  const howItWorksSteps = [
-    {
-      title: "Tiếp nhận & đánh giá hiện trạng",
-      image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=1400&auto=format&fit=crop",
-      content:
-        "Lắng nghe mục tiêu, rà soát dữ liệu và đánh giá các vấn đề đang tồn tại trong mô hình vận hành hiện tại.",
-    },
-    {
-      title: "Đề xuất giải pháp phù hợp",
-      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1400&auto=format&fit=crop",
-      content:
-        "Xây dựng lộ trình triển khai theo nhu cầu thực tế, tối ưu chi phí và đảm bảo tuân thủ pháp lý ngay từ đầu.",
-    },
-    {
-      title: "Triển khai - chuẩn hóa - bàn giao",
-      image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1400&auto=format&fit=crop",
-      content:
-        "Thiết lập hệ thống, chuẩn hóa quy trình và bàn giao đầy đủ tài liệu để đội ngũ có thể vận hành ngay.",
-    },
-    {
-      title: "Theo dõi & hỗ trợ vận hành",
-      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1400&auto=format&fit=crop",
-      content:
-        "Theo sát kết quả triển khai, hỗ trợ xử lý phát sinh và tối ưu liên tục để doanh nghiệp tăng trưởng bền vững.",
-    },
-  ];
+  const howItWorksSteps = lang === "vi"
+    ? [
+      {
+        title: "Tiếp nhận & đánh giá hiện trạng",
+        content:
+          "Lắng nghe mục tiêu, rà soát dữ liệu và đánh giá các vấn đề đang tồn tại trong mô hình vận hành hiện tại.",
+      },
+      {
+        title: "Đề xuất giải pháp phù hợp",
+        content:
+          "Xây dựng lộ trình triển khai theo nhu cầu thực tế, tối ưu chi phí và đảm bảo tuân thủ pháp lý ngay từ đầu.",
+      },
+      {
+        title: "Triển khai - chuẩn hóa - bàn giao",
+        content:
+          "Thiết lập hệ thống, chuẩn hóa quy trình và bàn giao đầy đủ tài liệu để đội ngũ có thể vận hành ngay.",
+      },
+      {
+        title: "Theo dõi & hỗ trợ vận hành",
+        content:
+          "Theo sát kết quả triển khai, hỗ trợ xử lý phát sinh và tối ưu liên tục để doanh nghiệp tăng trưởng bền vững.",
+      },
+    ]
+    : [
+      {
+        title: "Receive & assess the current state",
+        content:
+          "Listen to your goals, review your data and assess the issues in your current operating model.",
+      },
+      {
+        title: "Propose a fitting solution",
+        content:
+          "Build a rollout roadmap to your real needs, optimize cost and ensure legal compliance from the start.",
+      },
+      {
+        title: "Deploy - standardize - hand over",
+        content:
+          "Set up the system, standardize processes and hand over full documentation so your team can operate right away.",
+      },
+      {
+        title: "Monitor & support operations",
+        content:
+          "Track rollout results, help handle issues and optimize continuously so your business grows sustainably.",
+      },
+    ];
 
   const teamMembers = [
     {
       fullName: "Nguyễn Minh Khoa",
-      position: "Giám đốc tư vấn doanh nghiệp",
-      experience: "12+ năm kinh nghiệm tư vấn kế toán - pháp lý",
+      position: lang === "vi" ? "Giám đốc tư vấn doanh nghiệp" : "Director of Business Advisory",
+      experience:
+        lang === "vi"
+          ? "12+ năm kinh nghiệm tư vấn kế toán - pháp lý"
+          : "12+ years in accounting & legal advisory",
       image:
         "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=1200&h=900",
     },
     {
       fullName: "Trần Thu Hà",
-      position: "Trưởng bộ phận kế toán dịch vụ",
-      experience: "10+ năm triển khai chuẩn hóa sổ sách",
+      position: lang === "vi" ? "Trưởng bộ phận kế toán dịch vụ" : "Head of Outsourced Accounting",
+      experience:
+        lang === "vi"
+          ? "10+ năm triển khai chuẩn hóa sổ sách"
+          : "10+ years standardizing accounting books",
       image:
         "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=1200&h=900",
     },
     {
       fullName: "Lê Đức Anh",
-      position: "Chuyên gia pháp lý doanh nghiệp",
-      experience: "8+ năm xử lý hồ sơ thành lập và tuân thủ",
+      position: lang === "vi" ? "Chuyên gia pháp lý doanh nghiệp" : "Corporate Legal Specialist",
+      experience:
+        lang === "vi"
+          ? "8+ năm xử lý hồ sơ thành lập và tuân thủ"
+          : "8+ years handling formation & compliance dossiers",
       image:
         "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=1200&h=900",
     },
     {
       fullName: "Phạm Gia Hân",
-      position: "Tư vấn vận hành & tối ưu quy trình",
-      experience: "7+ năm đồng hành doanh nghiệp SME",
+      position: lang === "vi" ? "Tư vấn vận hành & tối ưu quy trình" : "Operations & Process Advisor",
+      experience:
+        lang === "vi" ? "7+ năm đồng hành doanh nghiệp SME" : "7+ years accompanying SMEs",
       image:
         "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=1200&h=900",
     },
   ];
 
-  const serviceFeatures = [
-    {
-      title: "100% miễn phí tư vấn ban đầu",
-      image: "https://www.advokatguiden.no/_nuxt/img/how-advokatguiden-search-works_hero.b59b87b.png",
-      content:
-        "Bạn nhận được tư vấn sơ bộ và định hướng giải pháp hoàn toàn miễn phí, không ràng buộc sử dụng dịch vụ.",
-    },
-    {
-      title: "Thông tin bảo mật",
-      image: "https://cdn.advokatguiden.no/public/no/articles/search/sKaOyfUXIS3rikREpUp2gisNYbdFTHa7DegvFNXf.jpg",
-      content:
-        "Toàn bộ dữ liệu doanh nghiệp được bảo mật trong suốt quá trình tư vấn, triển khai và bàn giao hồ sơ.",
-    },
-    {
-      title: "Giải pháp theo nhu cầu thực tế",
-      image: "https://www.advokatguiden.no/_nuxt/img/how-advokatguiden-leads-works_hero.790558f.png",
-      content:
-        "Mỗi phương án đều được đề xuất theo quy mô, mục tiêu và nguồn lực thực tế của doanh nghiệp, dễ áp dụng ngay.",
-    },
-  ];
-
   const partnerIndustries = [
     { id: "fnb", name: "F&B", companyCount: 126, icon: "utensils" },
-    { id: "xay-dung", name: "Xây dựng", companyCount: 74, icon: "building" },
-    { id: "cong-nghe", name: "Công nghệ", companyCount: 91, icon: "code" },
-    { id: "ban-le", name: "Bán lẻ", companyCount: 88, icon: "store" },
-    { id: "san-xuat", name: "Sản xuất", companyCount: 63, icon: "factory" },
-    { id: "thuong-mai", name: "Thương mại", companyCount: 57, icon: "briefcase" },
+    { id: "xay-dung", name: lang === "vi" ? "Xây dựng" : "Construction", companyCount: 74, icon: "building" },
+    { id: "cong-nghe", name: lang === "vi" ? "Công nghệ" : "Technology", companyCount: 91, icon: "code" },
+    { id: "ban-le", name: lang === "vi" ? "Bán lẻ" : "Retail", companyCount: 88, icon: "store" },
+    { id: "san-xuat", name: lang === "vi" ? "Sản xuất" : "Manufacturing", companyCount: 63, icon: "factory" },
+    { id: "thuong-mai", name: lang === "vi" ? "Thương mại" : "Commerce", companyCount: 57, icon: "briefcase" },
   ];
 
   const recentReviews = [
     {
-      name: "Kristoffer Botilsrud",
-      role: "Real estate lawyer in Oslo",
-      firm: "Oslo Advokatkontor AS",
-      reviewedAt: "Reviewed 3 hours ago",
+      name: "Nguyễn Thanh Tùng",
+      role: lang === "vi" ? "Giám đốc" : "Director",
+      firm: lang === "vi" ? "Chuỗi nhà hàng Minh Long F&B" : "Minh Long F&B restaurant chain",
+      reviewedAt: lang === "vi" ? "Đánh giá 3 ngày trước" : "Reviewed 3 days ago",
       content:
-        "We received good help and guidance from lawyer Kristoffer B, he was very professional, I recommend him.",
+        lang === "vi"
+          ? "SunPrime giúp chuỗi nhà hàng của tôi chuẩn hóa lại toàn bộ sổ sách và kê khai thuế. Hồ sơ luôn đúng hạn, số liệu rõ ràng, tôi yên tâm tập trung vận hành."
+          : "SunPrime helped my restaurant chain standardize all bookkeeping and tax filing. Dossiers are always on time, the numbers are clear, and I can focus on operations with peace of mind.",
       image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=150&h=150",
     },
     {
-      name: "Marie Hansen",
-      role: "Family Law Specialist",
-      firm: "Bergen Law Partners",
-      reviewedAt: "Reviewed 5 hours ago",
+      name: "Trần Mỹ Linh",
+      role: lang === "vi" ? "Nhà sáng lập" : "Founder",
+      firm: "FreshFood Mart",
+      reviewedAt: lang === "vi" ? "Đánh giá 5 ngày trước" : "Reviewed 5 days ago",
       content:
-        "Guided me through a difficult custody battle with empathy and expertise. I felt safe throughout the process.",
+        lang === "vi"
+          ? "Đội ngũ tư vấn rất tận tâm, giải thích dễ hiểu và phản hồi nhanh. Việc thành lập doanh nghiệp và thiết lập kế toán ban đầu diễn ra suôn sẻ hơn tôi nghĩ."
+          : "The advisory team is dedicated, explains clearly and responds fast. Setting up the company and our initial accounting went more smoothly than I expected.",
       image:
         "https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg",
     },
     {
-      name: "Sarah Jensen",
-      role: "Employment Law",
-      firm: "Trondheim Advokatene",
-      reviewedAt: "Reviewed 2 days ago",
+      name: "Phạm Đức Hải",
+      role: lang === "vi" ? "Tổng giám đốc" : "CEO",
+      firm: "Thiên An Construction",
+      reviewedAt: lang === "vi" ? "Đánh giá 1 tuần trước" : "Reviewed 1 week ago",
       content:
-        "Very detail-oriented and supportive. Sarah made sure I understood every clause in my new contract before signing.",
+        lang === "vi"
+          ? "Báo giá trọn gói minh bạch, không phát sinh. SunPrime đồng hành cả khi có kiểm tra thuế, xử lý chuyên nghiệp và đúng luật."
+          : "Transparent all-inclusive quote with no surprises. SunPrime stood by us even during tax inspections — professional and fully compliant.",
       image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=150&h=150",
     },
     {
-      name: "Anders Borg",
-      role: "Property Law",
-      firm: "Oslo Legal Group",
-      reviewedAt: "Reviewed 3 days ago",
+      name: "Lê Hoàng Quân",
+      role: lang === "vi" ? "Đồng sáng lập" : "Co-founder",
+      firm: "Horizon Tech",
+      reviewedAt: lang === "vi" ? "Đánh giá 3 ngày trước" : "Reviewed 3 days ago",
       content:
-        "Anders handled our property dispute with great professionalism. He was always available to answer our questions.",
+        lang === "vi"
+          ? "Là startup công nghệ, chúng tôi cần đối tác kế toán hiểu mô hình vận hành. SunPrime tư vấn đúng nhu cầu, không bán dư dịch vụ."
+          : "As a tech startup, we needed an accounting partner who understood our operating model. SunPrime advised exactly what we needed, with no over-selling.",
       image:
         "https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c543a9e1-f226-4ced-80b0-feb8445a75b9_1600w.jpg",
     },
     {
-      name: "Erik Thorne",
-      role: "Criminal Defense",
-      firm: "Thorne & Partners",
-      reviewedAt: "Reviewed 12 hours ago",
+      name: "Vũ Thị Ngọc",
+      role: lang === "vi" ? "Chủ doanh nghiệp" : "Business owner",
+      firm: "Blue Ocean Retail",
+      reviewedAt: lang === "vi" ? "Đánh giá 12 giờ trước" : "Reviewed 12 hours ago",
       content:
-        "Erik was incredibly thorough. He explained every step of the process and achieved a better outcome than I expected.",
+        lang === "vi"
+          ? "Quy trình làm việc rõ ràng theo từng bước, tôi luôn biết hồ sơ đang ở giai đoạn nào. Rất đáng tin cậy cho doanh nghiệp bán lẻ."
+          : "A clear step-by-step process — I always know which stage my dossier is at. Very reliable for a retail business.",
       image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150",
     },
     {
-      name: "Lina Berg",
-      role: "Contract Law",
-      firm: "Nordic Legal Group",
-      reviewedAt: "Reviewed 1 day ago",
+      name: "Đặng Quốc Bảo",
+      role: lang === "vi" ? "Giám đốc tài chính" : "CFO",
+      firm: "Sunray Logistics",
+      reviewedAt: lang === "vi" ? "Đánh giá 1 ngày trước" : "Reviewed 1 day ago",
       content:
-        "Lina helped us review our vendor contracts. Her attention to detail saved us from potential liabilities. Highly recommended.",
+        lang === "vi"
+          ? "Số liệu chính xác, tư vấn tối ưu chi phí thuế hợp lý và đúng quy định. Sự đồng hành dài hạn của SunPrime tạo khác biệt thật sự."
+          : "Accurate figures and sensible, compliant tax-cost optimization advice. SunPrime's long-term partnership makes a real difference.",
       image:
         "https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5bab247f-35d9-400d-a82b-fd87cfe913d2_1600w.webp",
     },
   ];
-
-  const legalTopics = [
-    {
-      title: "Family and personal life",
-      desc: "Divorce, children, inheritance, personal disputes",
-      icon: "user",
-    },
-    {
-      title: "Work and employment",
-      desc: "Contracts, termination, workplace conflicts",
-      icon: "briefcase",
-    },
-    {
-      title: "Money, tax and finance",
-      desc: "Tax, debt, banking, insurance, compensation",
-      icon: "banknote",
-    },
-    {
-      title: "Buying, housing and property",
-      desc: "Consumer rights, property purchases, construction",
-      icon: "home",
-    },
-    {
-      title: "Business and companies",
-      desc: "Company law, contracts, disputes, competition",
-      icon: "building-2",
-    },
-    {
-      title: "Conflicts and court cases",
-      desc: "Legal disputes, lawsuits, negotiations",
-      icon: "gavel",
-    },
-    {
-      title: "Criminal matters",
-      desc: "Charges, investigations, defense",
-      icon: "car",
-    },
-    {
-      title: "Public authorities and permits",
-      desc: "Decisions from authorities, permits, complaints",
-      icon: "calendar",
-    },
-    {
-      title: "Immigration and international matters",
-      desc: "Residency, citizenship, cross border cases",
-      icon: "contact-2",
-    },
-    {
-      title: "Specialised industries and regulation",
-      desc: "Energy, environment, shipping, tech, IP, health",
-      icon: "factory",
-    },
-  ];
-
-  const stateLinks = [
-    "Lawyers in California",
-    "Lawyers in Texas",
-    "Lawyers in Florida",
-    "Lawyers in New York State",
-    "Lawyers in Pennsylvania",
-    "Lawyers in Illinois",
-    "Lawyers in Ohio",
-    "Lawyers in Georgia",
-    "Lawyers in North Carolina",
-    "Lawyers in Michigan",
-    "Lawyers in New Jersey",
-    "Lawyers in Virginia",
-    "Lawyers in Washington",
-    "Lawyers in Arizona",
-    "Lawyers in Massachusetts",
-    "Lawyers in Tennessee",
-  ];
-
-  const legalCategories = [
-    {
-      title: "Company Law lawyer",
-      icon: "building-2",
-      links: ["Business Law lawyer", "Company lawyer", "Merger and Acquisitions lawyer"],
-    },
-    {
-      title: "Economy and Finance lawyer",
-      icon: "banknote",
-      links: ["Agreement and Contract Law lawyer", "Bankruptcy lawyer", "Financial Crime lawyer"],
-    },
-    {
-      title: "International Law lawyer",
-      icon: "plane",
-      links: ["EU Law lawyer", "Human Rights lawyer", "Immigration Law lawyer"],
-    },
-    {
-      title: "Regulatory lawyer",
-      icon: "file-text",
-      links: ["Bank and Finance lawyer", "Competition lawyer", "Environmental Law lawyer"],
-    },
-    {
-      title: "Family and personal life",
-      icon: "users",
-      links: ["Child custody lawyer", "Divorce lawyer", "Inheritance Law lawyer"],
-    },
-    {
-      title: "Property and housing",
-      icon: "home",
-      links: ["Construction Law lawyer", "Consumer rights lawyer", "Housing Law lawyer"],
-    },
-    {
-      title: "Criminal matters",
-      icon: "shield",
-      links: ["Criminal Defense lawyer", "Fraud and White Collar Crime", "Police investigations"],
-    },
-    {
-      title: "Employment and work",
-      icon: "briefcase",
-      links: ["Employment contracts lawyer", "Labour Law lawyer", "Termination and dismissal"],
-    },
-  ];
-
-  const renderTopicIcon = (icon: string) => {
-    switch (icon) {
-      case "user":
-        return (
-          <>
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
-          </>
-        );
-      case "briefcase":
-        return (
-          <>
-            <path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-            <rect width="20" height="14" x="2" y="6" rx="2" />
-          </>
-        );
-      case "banknote":
-        return (
-          <>
-            <rect width="20" height="12" x="2" y="6" rx="2" />
-            <circle cx="12" cy="12" r="2" />
-            <path d="M6 12h.01M18 12h.01" />
-          </>
-        );
-      case "home":
-        return (
-          <>
-            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-          </>
-        );
-      case "building-2":
-        return (
-          <>
-            <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
-            <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
-            <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
-            <path d="M10 6h4M10 10h4M10 14h4M10 18h4" />
-          </>
-        );
-      case "gavel":
-        return (
-          <>
-            <path d="m14.5 12.5-8 8a2.119 2.119 0 1 1-3-3l8-8" />
-            <path d="m16 16 6-6" />
-            <path d="m8 8 6-6" />
-            <path d="m9 7 8 8" />
-            <path d="m21 11-8-8" />
-          </>
-        );
-      case "car":
-        return (
-          <>
-            <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
-            <circle cx="7" cy="17" r="2" />
-            <path d="M9 17h6" />
-            <circle cx="17" cy="17" r="2" />
-          </>
-        );
-      case "calendar":
-        return (
-          <>
-            <path d="M8 2v4M16 2v4" />
-            <rect width="18" height="18" x="3" y="4" rx="2" />
-            <path d="M3 10h18" />
-          </>
-        );
-      case "contact-2":
-        return (
-          <>
-            <path d="M16 2v2M17.915 22a6 6 0 0 0-12 0M8 2v2" />
-            <circle cx="12" cy="12" r="4" />
-            <rect x="3" y="4" width="18" height="18" rx="2" />
-          </>
-        );
-      case "factory":
-        return (
-          <>
-            <path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
-            <path d="M17 18h1M12 18h1M7 18h1" />
-          </>
-        );
-      case "users":
-        return (
-          <>
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-            <circle cx="9" cy="7" r="4" />
-            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-          </>
-        );
-      case "plane":
-        return (
-          <>
-            <path d="M2 12h20" />
-            <path d="M13 2v20" />
-            <path d="M4 11 2 9" />
-            <path d="M16 11l5-5" />
-            <path d="M16 13l5 5" />
-            <path d="M4 13l-2 2" />
-          </>
-        );
-      case "file-text":
-        return (
-          <>
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-            <path d="M14 2v6h6" />
-            <path d="M10 9H8M16 13H8M16 17H8" />
-          </>
-        );
-      case "shield":
-        return <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />;
-      default:
-        return null;
-    }
-  };
 
   return (
     <>
@@ -539,7 +436,8 @@ export default function Home() {
             className="h-full w-full object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-black/45" />
+          <div className="absolute inset-0 bg-linear-to-tr from-brand-ink/85 via-text-primary/55 to-text-primary/30" />
+          <div className="absolute inset-0 bg-linear-to-t from-text-primary/70 via-transparent to-transparent" />
         </div>
 
         <div className="relative z-10 mx-auto w-full max-w-7xl text-white">
@@ -551,7 +449,7 @@ export default function Home() {
               className="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-colors duration-200 hover:scale-[1.02] hover:text-white"
             >
               <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_0_4px_rgba(74,222,128,0.18)]" />
-              <span>sunprimePortal v1 đã hoạt động</span>
+              <span>{lang === "vi" ? "sunprimePortal v1 đã hoạt động" : "sunprimePortal v1 is live"}</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="14"
@@ -576,10 +474,10 @@ export default function Home() {
                   <Link
                     key={category.id}
                     href={`/services#${category.id}`}
-                    className="group inline-flex origin-left items-center gap-3 text-left text-5xl font-medium leading-tight text-white transition-all duration-300 hover:scale-[1.03] hover:text-white lg:text-6xl"
+                    className="group inline-flex origin-left items-center gap-2 text-left text-3xl font-medium leading-tight text-white transition-all duration-300 hover:scale-[1.03] hover:text-white sm:gap-3 sm:text-5xl lg:text-6xl"
                   >
-                    <span>{category.title}</span>
-                    <span className="translate-x-1 text-3xl text-white opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 lg:text-4xl">
+                    <span className="text-balance">{heroCategoryLabels[category.id] ?? category.title}</span>
+                    <span className="translate-x-1 text-2xl text-white opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 sm:text-3xl lg:text-4xl">
                       →
                     </span>
                   </Link>
@@ -591,7 +489,7 @@ export default function Home() {
         </div>
 
         <div className="absolute bottom-4 right-4 z-20 max-w-[320px] rounded-lg border border-white/25 bg-brand-ink/55 px-3 py-2 text-white backdrop-blur-sm sm:bottom-6 sm:right-6">
-          <p className="text-[10px] uppercase tracking-widest text-white/80">Thông tin mới</p>
+          <p className="text-[10px] uppercase tracking-widest text-white/80">{lang === "vi" ? "Thông tin mới" : "Latest updates"}</p>
           <p key={heroUpdateIndex} className="mt-1 text-xs leading-relaxed text-white animate-fade-up">
             {heroUpdates[heroUpdateIndex]}
           </p>
@@ -603,7 +501,7 @@ export default function Home() {
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-6 text-center">
             <span className="mb-2 inline-flex rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">
-              Những khách hàng đã tin tưởng chúng tôi
+              {th.trustedBy}
             </span>
           </div>
 
@@ -632,7 +530,7 @@ export default function Home() {
                 .map((brand, index) => (
                   <div
                     key={`${brand.name}-${index}`}
-                    className="group inline-flex h-18 min-w-[250px] items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-5 py-3 text-sm font-semibold tracking-wide text-slate-700 shadow-[0_10px_30px_rgba(15,23,42,0.20)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(79,70,229,0.35)]"
+                    className="group inline-flex h-18 min-w-[250px] items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-5 py-3 text-sm font-semibold tracking-wide text-slate-700 shadow-[0_10px_30px_rgba(15,23,42,0.20)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(156,90,52,0.35)]"
                   >
                     <span
                       className={`inline-flex h-10 w-10 items-center justify-center bg-linear-to-br ${brand.tone} rounded-xl text-sm font-extrabold text-brand-ink shadow-inner`}
@@ -651,16 +549,16 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-20 max-w-3xl text-center">
             <h2 className="mb-6 text-4xl font-semibold tracking-tight text-text-primary lg:text-5xl">
-              Dịch vụ của chúng tôi
+              {th.servicesTitle}
             </h2>
-            <p className="text-xl font-normal text-text-muted">Chúng tôi đồng hành cùng doanh nghiệp bạn thông qua những chiến lược tài chính và pháp lý tối ưu, được đo ni đóng giày cho từng mục tiêu cụ thể.</p>
+            <p className="text-xl font-normal text-text-muted">{th.servicesDesc}</p>
           </div>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {featuredServiceCards.map((service) => (
               <div
                 key={service.slug}
-                className="group flex h-full flex-col rounded-2xl border border-border bg-surface-card p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-300 hover:-translate-y-2 hover:border-brand-ring hover:bg-surface-tint hover:shadow-[0_20px_40px_rgba(79,70,229,0.15)]"
+                className="group flex h-full flex-col rounded-2xl border border-border bg-surface-card p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-300 hover:-translate-y-2 hover:border-brand-ring hover:bg-surface-tint hover:shadow-[0_20px_40px_rgba(156,90,52,0.15)]"
               >
                 <div className="origin-left mb-6 text-text-primary transition-all duration-300 group-hover:scale-110 group-hover:text-brand">
                   {renderServiceCardIcon(service.slug)}
@@ -671,7 +569,7 @@ export default function Home() {
                   href={`/services/${service.slug}`}
                   className="mt-auto inline-flex items-center pt-5 text-sm font-semibold text-brand transition-all duration-200 group-hover:translate-x-1 hover:text-brand-strong"
                 >
-                  Tất cả dịch vụ
+                  {th.allServicesCard}
                 </Link>
               </div>
             ))}
@@ -682,7 +580,7 @@ export default function Home() {
               href="/services"
               className="inline-flex items-center gap-2 rounded-lg bg-brand px-7 py-3 text-sm font-semibold text-text-inverse shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-strong hover:shadow-md"
             >
-              Tìm hiểu thêm
+              {th.learnMore}
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14" />
                 <path d="m12 5 7 7-7 7" />
@@ -693,13 +591,13 @@ export default function Home() {
       </section>
 
       <section className="relative overflow-hidden bg-surface-section py-24">
-        <div className="pointer-events-none absolute inset-0 opacity-[0.1] [background-image:linear-gradient(rgba(79,70,229,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(79,70,229,0.16)_1px,transparent_1px)] [background-size:34px_34px]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.1] [background-image:linear-gradient(rgba(156,90,52,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(156,90,52,0.16)_1px,transparent_1px)] [background-size:34px_34px]" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-32">
             <div className="mb-12 max-w-4xl">
-              <span className="mb-4 block text-base font-medium text-text-muted">Quy trình làm việc</span>
+              <span className="mb-4 block text-base font-medium text-text-muted">{th.processEyebrow}</span>
               <h2 className="text-4xl font-semibold leading-[1.1] tracking-tight text-text-primary lg:text-5xl">
-                Chúng tôi triển khai theo 4 bước rõ ràng, minh bạch và đồng hành xuyên suốt cùng doanh nghiệp.
+                {th.processTitle}
               </h2>
             </div>
 
@@ -707,10 +605,10 @@ export default function Home() {
               {howItWorksSteps.map((step, index) => (
                 <article
                   key={step.title}
-                  className="group relative flex min-h-[320px] flex-col items-center rounded-3xl border border-border-strong bg-surface-tint px-6 pb-8 pt-12 text-center shadow-[0_6px_20px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-3 hover:scale-[1.01] hover:border-brand-ring hover:bg-surface-base hover:shadow-[0_24px_44px_rgba(79,70,229,0.22)] hover:ring-2 hover:ring-brand-ring"
+                  className="group relative flex min-h-[320px] flex-col items-center rounded-3xl border border-border-strong bg-surface-tint px-6 pb-8 pt-12 text-center shadow-[0_6px_20px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-3 hover:scale-[1.01] hover:border-brand-ring hover:bg-surface-base hover:shadow-[0_24px_44px_rgba(156,90,52,0.22)] hover:ring-2 hover:ring-brand-ring"
                 >
                   <span className="absolute -top-4 inline-flex rounded-full bg-brand px-4 py-1.5 text-sm font-semibold text-text-inverse shadow-md transition-all duration-300 group-hover:scale-105 group-hover:bg-brand-strong">
-                    Bước {String(index + 1).padStart(2, "0")}
+                    {th.stepLabel} {String(index + 1).padStart(2, "0")}
                   </span>
 
                   <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-soft-hover text-brand transition-all duration-300 group-hover:scale-125 group-hover:rotate-3 group-hover:bg-brand-ring group-hover:text-brand-ink">
@@ -754,38 +652,22 @@ export default function Home() {
       </section>
 
       <section className="relative overflow-hidden bg-linear-to-br from-brand/20 via-brand/10 to-surface-base py-24">
-        <div className="pointer-events-none absolute inset-0 opacity-[0.1] [background-image:linear-gradient(rgba(79,70,229,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(79,70,229,0.14)_1px,transparent_1px)] [background-size:34px_34px]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.1] [background-image:linear-gradient(rgba(156,90,52,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(156,90,52,0.14)_1px,transparent_1px)] [background-size:34px_34px]" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 max-w-4xl">
             <h2 className="text-3xl font-bold tracking-tight text-text-primary lg:text-4xl">
-              Vì sao khách hàng chọn chúng tôi
+              {th.whyTitle}
             </h2>
             <p className="mt-3 text-base leading-relaxed text-text-secondary">
-              Giải pháp của SunPrime tập trung vào tính thực tiễn, kết quả đo lường được và đồng hành dài hạn cùng doanh nghiệp.
+              {th.whyDesc}
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {[
-              {
-                title: "Hiểu sâu thực tế doanh nghiệp",
-                description:
-                  "Chúng tôi bắt đầu từ việc đi sâu vào mô hình vận hành thực tế, dữ liệu hiện có và các điểm nghẽn đang xảy ra, để đề xuất đúng giải pháp doanh nghiệp cần thay vì áp dụng khuôn mẫu chung.",
-              },
-              {
-                title: "Không tư vấn lý thuyết, tập trung vào kết quả",
-                description:
-                  "Mọi giải pháp đều gắn với chỉ số đo lường cụ thể như tiến độ hồ sơ, độ chính xác số liệu và hiệu quả vận hành, giúp doanh nghiệp nhìn thấy kết quả rõ ràng sau từng giai đoạn triển khai.",
-              },
-              {
-                title: "Đồng hành lâu dài, không làm dịch vụ cho xong",
-                description:
-                  "SunPrime theo sát sau triển khai, hỗ trợ xử lý phát sinh và tối ưu liên tục để doanh nghiệp vận hành ổn định, giảm rủi ro và phát triển bền vững trong dài hạn.",
-              },
-            ].map((reason, index) => (
+            {th.reasons.map((reason, index) => (
               <article
                 key={reason.title}
-                className="rounded-2xl border border-border bg-surface-section p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-ring hover:bg-surface-base hover:shadow-[0_16px_30px_rgba(79,70,229,0.14)]"
+                className="rounded-2xl border border-border bg-surface-section p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-ring hover:bg-surface-base hover:shadow-[0_16px_30px_rgba(156,90,52,0.14)]"
               >
                 <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-soft text-brand">
                   <span className="text-sm font-bold">{index + 1}</span>
@@ -798,14 +680,9 @@ export default function Home() {
 
           <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2">
             <article className="rounded-2xl border border-border bg-surface-base p-6 shadow-sm">
-              <h3 className="mb-4 text-xl font-bold text-text-primary">Cam kết trách nhiệm</h3>
+              <h3 className="mb-4 text-xl font-bold text-text-primary">{th.commitResponsibility}</h3>
               <ul className="space-y-3 text-text-secondary">
-                {[
-                  "Đúng luật - đúng hạn - đúng số liệu",
-                  "Bảo mật tuyệt đối thông tin doanh nghiệp",
-                  "Chịu trách nhiệm hồ sơ kế toán do Sun Prime thực hiện",
-                  "Đồng hành và hỗ trợ khi phát sinh kiểm tra thuế",
-                ].map((item) => (
+                {th.commitResponsibilityItems.map((item) => (
                   <li key={item} className="flex items-start gap-2">
                     <span className="mt-1 h-2 w-2 rounded-full bg-brand" />
                     <span>{item}</span>
@@ -815,13 +692,9 @@ export default function Home() {
             </article>
 
             <article className="rounded-2xl border border-border bg-surface-base p-6 shadow-sm">
-              <h3 className="mb-4 text-xl font-bold text-text-primary">Cam kết chi phí</h3>
+              <h3 className="mb-4 text-xl font-bold text-text-primary">{th.commitCost}</h3>
               <ul className="space-y-3 text-text-secondary">
-                {[
-                  "Báo giá trọn gói - rõ ràng - không phát sinh",
-                  "Tư vấn đúng nhu cầu, không bán dư dịch vụ",
-                  "Minh bạch ngay từ đầu",
-                ].map((item) => (
+                {th.commitCostItems.map((item) => (
                   <li key={item} className="flex items-start gap-2">
                     <span className="mt-1 h-2 w-2 rounded-full bg-brand" />
                     <span>{item}</span>
@@ -838,21 +711,19 @@ export default function Home() {
           <div className="flex flex-col items-center justify-between gap-14 lg:flex-row lg:items-start lg:gap-16">
             <div className="z-10 w-full lg:w-5/12">
               <span className="mb-3 block text-sm font-semibold uppercase tracking-wide text-text-secondary">
-                Đội ngũ của chúng tôi
+                {th.teamEyebrow}
               </span>
               <h2 className="mb-6 text-4xl font-bold leading-[1.1] tracking-tight text-text-primary lg:text-5xl">
-                Đội ngũ chuyên gia đồng hành cùng doanh nghiệp tăng trưởng bền vững
+                {th.teamTitle}
               </h2>
               <p className="mb-8 text-lg leading-relaxed text-text-secondary">
-                Mỗi thành viên tại SunPrime đều có kinh nghiệm thực chiến trong kế toán, pháp lý và vận hành
-                doanh nghiệp. Chúng tôi phối hợp như một đội ngũ nội bộ mở rộng, giúp bạn giải quyết đúng vấn đề
-                và triển khai hiệu quả ngay từ đầu.
+                {th.teamDesc}
               </p>
               <Link
                 href="/contact"
                 className="inline-flex items-center gap-2 rounded-lg bg-button-secondary px-6 py-3 text-base font-semibold text-brand-ink transition-colors duration-200 hover:bg-button-secondary-hover"
               >
-                Liên hệ đội ngũ tư vấn
+                {th.teamCta}
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14" />
                   <path d="m12 5 7 7-7 7" />
@@ -868,7 +739,7 @@ export default function Home() {
                 {[...teamMembers, ...teamMembers].map((member, index) => (
                   <article
                     key={`${member.fullName}-${index}`}
-                    className="group overflow-hidden rounded-2xl bg-white shadow-[0_14px_30px_rgba(15,23,42,0.14)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_22px_40px_rgba(79,70,229,0.24)]"
+                    className="group overflow-hidden rounded-2xl bg-white shadow-[0_14px_30px_rgba(15,23,42,0.14)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_22px_40px_rgba(156,90,52,0.24)]"
                   >
                     <div className="relative h-64 w-full overflow-hidden">
                       <Image
@@ -893,15 +764,15 @@ export default function Home() {
       </section>
 
       <section className="relative overflow-hidden bg-linear-to-br from-brand/20 via-brand/10 to-surface-base py-24">
-        <div className="pointer-events-none absolute inset-0 opacity-[0.1] [background-image:linear-gradient(rgba(79,70,229,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(79,70,229,0.14)_1px,transparent_1px)] [background-size:34px_34px]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.1] [background-image:linear-gradient(rgba(156,90,52,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(156,90,52,0.14)_1px,transparent_1px)] [background-size:34px_34px]" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 max-w-4xl">
-            <span className="mb-2 block text-sm font-medium uppercase tracking-wide text-text-secondary">Ngành đã hợp tác</span>
+            <span className="mb-2 block text-sm font-medium uppercase tracking-wide text-text-secondary">{th.industriesEyebrow}</span>
             <h2 className="mb-4 text-4xl font-bold leading-[1.1] tracking-tight text-text-primary lg:text-5xl">
-              Những lĩnh vực chúng tôi đã đồng hành
+              {th.industriesTitle}
             </h2>
             <p className="text-lg leading-relaxed text-text-secondary">
-              SunPrime đã tư vấn và triển khai cho doanh nghiệp ở nhiều lĩnh vực khác nhau, với giải pháp linh hoạt theo đặc thù từng ngành.
+              {th.industriesDesc}
             </p>
           </div>
 
@@ -909,7 +780,7 @@ export default function Home() {
             {partnerIndustries.map((industry) => (
               <article
                 key={industry.id}
-                className="group rounded-2xl border border-border bg-surface-base/90 p-6 shadow-[0_6px_20px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-2 hover:scale-[1.01] hover:border-brand-ring hover:bg-surface-base hover:shadow-[0_22px_42px_rgba(79,70,229,0.2)] hover:ring-2 hover:ring-brand-soft-hover"
+                className="group rounded-2xl border border-border bg-surface-base/90 p-6 shadow-[0_6px_20px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-2 hover:scale-[1.01] hover:border-brand-ring hover:bg-surface-base hover:shadow-[0_22px_42px_rgba(156,90,52,0.2)] hover:ring-2 hover:ring-brand-soft-hover"
               >
                 <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-soft text-brand transition-all duration-300 group-hover:scale-125 group-hover:rotate-3 group-hover:bg-brand-ring group-hover:text-brand-ink">
                   {industry.icon === "utensils" ? (
@@ -957,13 +828,13 @@ export default function Home() {
                 <h3 className="mb-2 text-2xl font-semibold tracking-tight text-text-primary">{industry.name}</h3>
                 <p className="text-base font-normal text-text-secondary">
                   <span className="text-2xl font-bold text-brand">{industry.companyCount}</span>{" "}
-                  doanh nghiệp đã hợp tác
+                  {th.companiesPartnered}
                 </p>
                 <Link
                   href="/stories"
                   className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand transition-all duration-300 group-hover:translate-x-1 hover:text-brand-strong"
                 >
-                  Kết nối đến các doanh nghiệp
+                  {th.connectBusinesses}
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14" />
                     <path d="m12 5 7 7-7 7" />
@@ -978,7 +849,7 @@ export default function Home() {
               href="/stories"
               className="inline-flex items-center gap-2 rounded-lg bg-button-primary px-7 py-3 text-sm font-semibold text-button-text shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-button-primary-hover hover:shadow-md"
             >
-              Tìm hiểu thêm
+              {th.learnMore}
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14" />
                 <path d="m12 5 7 7-7 7" />
@@ -989,11 +860,11 @@ export default function Home() {
       </section>
 
       <section className="relative overflow-hidden bg-surface-section pb-24 pt-24">
-        <div className="pointer-events-none absolute inset-0 opacity-[0.1] [background-image:linear-gradient(rgba(79,70,229,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(79,70,229,0.16)_1px,transparent_1px)] [background-size:34px_34px]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.1] [background-image:linear-gradient(rgba(156,90,52,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(156,90,52,0.16)_1px,transparent_1px)] [background-size:34px_34px]" />
         <div className="relative z-10 mx-auto mb-12 flex max-w-7xl flex-col items-end justify-between gap-6 px-4 sm:px-6 md:flex-row lg:px-8">
           <div className="max-w-2xl">
             <h2 className="text-3xl font-bold leading-tight tracking-tight text-text-primary lg:text-4xl">
-              Đánh giá của khách hàng dành cho chúng tôi
+              {th.reviewsTitle}
             </h2>
           </div>
         </div>
@@ -1035,16 +906,16 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="max-w-3xl">
-              <h2 className="mb-4 text-3xl font-bold tracking-tight text-text-primary">Bản tin SunPrime</h2>
+              <h2 className="mb-4 text-3xl font-bold tracking-tight text-text-primary">{th.newsTitle}</h2>
               <p className="text-base text-text-secondary">
-                Cập nhật các bài viết mới về kế toán, pháp lý và vận hành doanh nghiệp từ đội ngũ SunPrime.
+                {th.newsDesc}
               </p>
             </div>
             <Link
               href="/tin-tuc"
               className="inline-flex items-center gap-2 rounded-lg border border-brand px-4 py-2 text-sm font-semibold text-brand transition-all duration-200 hover:bg-brand-soft"
             >
-              Xem tất cả
+              {th.viewAll}
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14" />
                 <path d="m12 5 7 7-7 7" />
@@ -1053,28 +924,30 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {newsArticles.map((article) => (
+            {newsArticles.slice(0, 8).map((article) => (
               <Link
                 key={article.slug}
                 href={`/tin-tuc/${article.slug}`}
-                className="group flex h-full flex-col rounded-2xl border border-border bg-surface-base p-4 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-brand-ring hover:shadow-[0_20px_38px_rgba(79,70,229,0.18)]"
+                className="group flex h-full flex-col rounded-2xl border border-border bg-surface-base p-4 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-brand-ring hover:shadow-[0_20px_38px_rgba(156,90,52,0.18)]"
               >
                 <div className="relative mb-5 aspect-16/10 overflow-hidden rounded-xl bg-surface-section">
                   <Image
-                    src={article.image}
-                    alt={article.title}
+                    src={article.image || '/images/no-image-news.svg'}
+                    alt={article.image ? article.title : `Không có ảnh - ${article.title}`}
                     fill
                     sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 </div>
-                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-text-muted">{article.date}</p>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-text-muted">
+                  {new Intl.DateTimeFormat(lang === 'vi' ? 'vi-VN' : 'en-US', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(new Date(article.publishedAt))}
+                </p>
                 <h3 className="text-lg font-bold leading-snug text-text-primary transition-colors duration-300 group-hover:text-brand">
                   {article.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-text-muted">{article.subtitle}</p>
+                <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-text-muted">{article.excerpt}</p>
                 <span className="mt-auto inline-flex items-center gap-2 pt-5 text-sm font-semibold text-brand transition-all duration-300 group-hover:translate-x-1">
-                  Đọc tiếp
+                  {th.readMore}
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14" />
                     <path d="m12 5 7 7-7 7" />
@@ -1095,28 +968,121 @@ export default function Home() {
                 SunPrime Consulting
               </span>
               <h2 className="mb-6 text-4xl font-semibold tracking-tight text-text-inverse lg:text-5xl">
-                Bạn cần tư vấn ngay?
+                {th.ctaTitle}
               </h2>
               <p className="mb-10 text-lg font-normal text-text-inverse">
-                Đội ngũ SunPrime sẵn sàng hỗ trợ doanh nghiệp về pháp lý, kế toán và vận hành với lộ trình rõ ràng, minh bạch ngay từ đầu.
+                {th.ctaDesc}
               </p>
               <a
                 href="#"
                 className="inline-flex items-center justify-center rounded-lg border border-transparent bg-button-text-dark px-8 py-3.5 text-base font-semibold text-text-inverse transition-all duration-200 hover:bg-text-primary hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-border-strong focus:ring-offset-2"
               >
-                Nhận tư vấn miễn phí
+                {th.ctaButton}
               </a>
             </div>
 
             <div className="relative w-full lg:w-1/2">
-              <div className="relative aspect-[4/5] max-h-[600px] w-full overflow-hidden rounded-t-2xl lg:h-full lg:max-h-none lg:aspect-square lg:rounded-none">
-                <Image
-                  src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/d43228d9-eca2-4816-936c-17be2992b43e_1600w.png"
-                  alt="Lawyer profile"
-                  fill
-                  sizes="(min-width: 1024px) 50vw, 100vw"
-                  className="h-full w-full object-cover object-top lg:scale-110"
-                />
+              <div className="rounded-2xl bg-transparent p-4 lg:p-5">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <a
+                      href="https://instagram.com"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mb-3 inline-flex items-center gap-2 text-base font-semibold text-white hover:text-white/80"
+                    >
+                      Follow Instagram
+                      <span aria-hidden="true">↗</span>
+                    </a>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {[
+                        "https://images.unsplash.com/photo-1590846406792-0adc7f938f1d?q=80&w=800&auto=format&fit=crop",
+                        "https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=800&auto=format&fit=crop",
+                        "https://images.unsplash.com/photo-1543779503-664c37a21e7e?q=80&w=800&auto=format&fit=crop",
+                        "https://images.unsplash.com/photo-1517433670267-08bbd4be890f?q=80&w=800&auto=format&fit=crop",
+                        "https://images.unsplash.com/photo-1481833761820-0509d3217039?q=80&w=800&auto=format&fit=crop",
+                        "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop",
+                      ].map((src, index) => (
+                        <div key={`insta-${index}`} className="relative aspect-square overflow-hidden rounded-sm">
+                          <Image
+                            src={src}
+                            alt={`Instagram post ${index + 1}`}
+                            fill
+                            sizes="(min-width: 1024px) 16vw, 33vw"
+                            className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <a
+                      href="https://facebook.com"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mb-3 inline-flex items-center gap-2 text-base font-semibold text-white hover:text-white/80"
+                    >
+                      Follow Facebook
+                      <span aria-hidden="true">↗</span>
+                    </a>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {[
+                        "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=800&auto=format&fit=crop",
+                        "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop",
+                        "https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=800&auto=format&fit=crop",
+                        "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800&auto=format&fit=crop",
+                        "https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?q=80&w=800&auto=format&fit=crop",
+                        "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800&auto=format&fit=crop",
+                      ].map((src, index) => (
+                        <div key={`facebook-${index}`} className="relative aspect-square overflow-hidden rounded-sm">
+                          <Image
+                            src={src}
+                            alt={`Facebook post ${index + 1}`}
+                            fill
+                            sizes="(min-width: 1024px) 16vw, 33vw"
+                            className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4">
+                  <a
+                    href="https://www.tiktok.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mb-3 inline-flex items-center gap-2 text-base font-semibold text-white hover:text-white/80"
+                  >
+                    Follow TikTok
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      "https://images.unsplash.com/photo-1521302200778-33500795e128?q=80&w=900&auto=format&fit=crop",
+                      "https://images.unsplash.com/photo-1530023367847-a683933f4172?q=80&w=900&auto=format&fit=crop",
+                      "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=900&auto=format&fit=crop",
+                    ].map((src, index) => (
+                      <div key={`tiktok-${index}`} className="group relative aspect-[9/16] overflow-hidden rounded-sm">
+                        <Image
+                          src={src}
+                          alt={`TikTok video ${index + 1}`}
+                          fill
+                          sizes="(min-width: 1024px) 16vw, 32vw"
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-black/20 transition-colors duration-300 group-hover:bg-black/10" />
+                        <span className="absolute inset-0 flex items-center justify-center">
+                          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-slate-900 shadow-md">
+                            ▶
+                          </span>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

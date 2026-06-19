@@ -3,17 +3,51 @@
 
 :root {
   /*
+   * ============================================================
+   *  MÀU CHỦ ĐẠO TOÀN WEB
+   *  → CHỈ CẦN ĐỔI 1 DÒNG `--brand-base` BÊN DƯỚI LÀ ĐỔI MÀU CHÍNH CẢ WEB.
+   *  Mọi sắc độ (đậm/nhạt/hover/ring/ink) và các token cùng màu
+   *  (link, section nhấn, nút chính) đều tự suy ra từ biến này.
+   * ============================================================
+   */
+  --brand-base: #9c5a34; /* ⬅️ ĐỔI MÀU CHÍNH CỦA CẢ WEB TẠI ĐÂY (nâu đất / terracotta) */
+
+  /* Sắc độ tự suy ra từ --brand-base — KHÔNG cần chỉnh tay */
+  --color-brand: var(--brand-base);
+  --color-brand-strong: color-mix(in oklab, var(--brand-base), black 22%); /* hover/active */
+  --color-brand-soft: color-mix(in oklab, var(--brand-base), white 92%); /* nền nhấn nhẹ */
+  --color-brand-soft-hover: color-mix(in oklab, var(--brand-base), white 84%);
+  --color-brand-ring: color-mix(in oklab, var(--brand-base), white 55%); /* ring/focus */
+  --color-brand-ink: color-mix(in oklab, var(--brand-base), black 55%); /* chữ trên nền soft */
+
+  /*
    * Typography role tokens:
    * - Đổi font body/heading tại đây để toàn bộ site cập nhật theo.
    */
   --font-body-token: var(--font-geist);
-  --font-heading-token: var(--font-geist);
+  --font-heading-token: var(--font-heading);
+
+  /*
+   * Hệ bóng đổ mềm nhiều lớp (depth) — dùng qua util shadow-soft / shadow-soft-lg / shadow-brand-glow.
+   * Tông bóng ngả ấm theo --brand-base để hài hoà với giao diện nâu đất.
+   */
+  --shadow-soft: 0 1px 2px -1px rgb(74 45 24 / 0.08), 0 4px 12px -4px rgb(74 45 24 / 0.1);
+  --shadow-soft-lg: 0 2px 4px -2px rgb(74 45 24 / 0.08), 0 12px 32px -8px rgb(74 45 24 / 0.14);
+  --shadow-soft-xl: 0 4px 8px -4px rgb(74 45 24 / 0.1), 0 24px 56px -12px rgb(74 45 24 / 0.18);
+  --shadow-brand-glow: 0 10px 40px -10px color-mix(in oklab, var(--brand-base), transparent 62%);
 }
 
 @layer base {
+  html {
+    /* Nav sticky cao 80px → chừa khoảng khi cuộn tới anchor để không bị che tiêu đề */
+    scroll-padding-top: 6rem;
+  }
+
   body {
     @apply bg-surface-base font-body text-text-secondary;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   h1,
@@ -22,8 +56,123 @@
   h4,
   h5,
   h6 {
-    @apply font-heading text-text-primary;
+    @apply font-heading font-semibold text-text-primary;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
   }
+
+  h1 {
+    line-height: 1.08;
+  }
+
+  h2 {
+    line-height: 1.15;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--brand-base), white 60%);
+    color: var(--color-brand-ink);
+  }
+
+  /* Focus ring nhất quán, dễ tiếp cận (a11y) */
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* Style nội dung bài viết HTML (render từ API qua dangerouslySetInnerHTML) */
+.prose-news p {
+  margin-bottom: 1.1rem;
+}
+
+.prose-news h1,
+.prose-news h2,
+.prose-news h3,
+.prose-news h4 {
+  margin-top: 1.6rem;
+  margin-bottom: 0.6rem;
+  color: var(--color-brand-ink, #2a211b);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.prose-news h2 {
+  font-size: 1.5rem;
+}
+
+.prose-news h3 {
+  font-size: 1.25rem;
+}
+
+.prose-news ul,
+.prose-news ol {
+  margin: 0 0 1.1rem 1.25rem;
+  list-style-position: outside;
+}
+
+.prose-news ul {
+  list-style-type: disc;
+}
+
+.prose-news ol {
+  list-style-type: decimal;
+}
+
+.prose-news li {
+  margin-bottom: 0.4rem;
+}
+
+.prose-news a {
+  color: var(--color-brand);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose-news a:hover {
+  color: var(--color-brand-strong);
+}
+
+.prose-news img {
+  border-radius: 1rem;
+  margin: 1.25rem 0;
+  max-width: 100%;
+  height: auto;
+}
+
+.prose-news blockquote {
+  border-left: 3px solid var(--color-brand-ring);
+  padding-left: 1rem;
+  font-style: italic;
+  color: var(--color-brand-ink, #2a211b);
+  margin: 1.25rem 0;
+}
+
+.prose-news strong {
+  color: var(--color-brand-ink, #2a211b);
+  font-weight: 600;
+}
+
+/* Tiện ích bóng đổ mềm (depth) */
+.shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+
+.shadow-soft-lg {
+  box-shadow: var(--shadow-soft-lg);
+}
+
+.shadow-soft-xl {
+  box-shadow: var(--shadow-soft-xl);
+}
+
+.shadow-brand-glow {
+  box-shadow: var(--shadow-brand-glow);
 }
 
 /* Custom Scrollbar Hide */
@@ -94,11 +243,11 @@
 @keyframes ctaGlow {
   0%,
   100% {
-    box-shadow: 0 10px 24px -12px rgba(79, 70, 229, 0.32);
+    box-shadow: 0 10px 24px -12px color-mix(in oklab, var(--brand-base), transparent 60%);
   }
 
   50% {
-    box-shadow: 0 14px 30px -10px rgba(79, 70, 229, 0.5);
+    box-shadow: 0 14px 30px -10px color-mix(in oklab, var(--brand-base), transparent 45%);
   }
 }
 
@@ -149,9 +298,13 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border: 1px solid rgba(199, 210, 254, 0.95);
+  border: 1px solid color-mix(in oklab, var(--brand-base), white 55%);
   border-radius: 9999px;
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.98), rgba(67, 56, 202, 0.98));
+  background: linear-gradient(
+    135deg,
+    var(--brand-base),
+    color-mix(in oklab, var(--brand-base), black 22%)
+  );
   color: #fff;
   font-size: 12px;
   font-weight: 700;

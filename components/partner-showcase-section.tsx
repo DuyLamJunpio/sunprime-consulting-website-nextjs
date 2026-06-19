@@ -4,6 +4,8 @@ import { Partner, partners } from "@/data/partners";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useI18n } from "@/components/i18n-provider";
+import { messages } from "@/lib/i18n/messages";
 
 type PartnerShowcaseSectionProps = {
   showHero?: boolean;
@@ -11,6 +13,8 @@ type PartnerShowcaseSectionProps = {
 };
 
 function PartnerShowcaseSectionContent({ showHero = true, containerClassName = "" }: PartnerShowcaseSectionProps) {
+  const { lang } = useI18n();
+  const t = messages[lang].partners;
   const [filter, setFilter] = useState("All");
   const [view, setView] = useState<"grid" | "list">("grid");
   const searchParams = useSearchParams();
@@ -63,32 +67,25 @@ function PartnerShowcaseSectionContent({ showHero = true, containerClassName = "
       {showHero ? (
         <section className="relative overflow-hidden bg-linear-to-br from-brand via-brand-strong to-brand-ink py-24 text-text-inverse">
           <div className="absolute inset-0 opacity-20">
-            <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,#a5b4fc_0,transparent_55%),radial-gradient(circle_at_bottom_left,#818cf8_0,transparent_45%)]" />
+            <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,#f0d8c2_0,transparent_55%),radial-gradient(circle_at_bottom_left,#e4c9ae_0,transparent_45%)]" />
           </div>
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.22)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.22)_1px,transparent_1px)] bg-size-[36px_36px] opacity-[0.16]" />
           <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl animate-fade-up">
               <h5 className="mb-3 inline-flex rounded-full border border-white/35 bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
-                Câu chuyện khách hàng
+                {t.heroEyebrow}
               </h5>
-              <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
-                Đồng hành vận hành thực chiến cùng doanh nghiệp dịch vụ.
-              </h1>
-              <p className="mt-5 text-lg leading-relaxed text-white/90">
-                Khám phá những thương hiệu đã tối ưu vận hành, quản trị số liệu và tăng trưởng bền vững với giải pháp
-                từ SunPrime.
-              </p>
+              <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">{t.heroTitle}</h1>
+              <p className="mt-5 text-lg leading-relaxed text-white/90">{t.heroDesc}</p>
             </div>
           </div>
         </section>
       ) : (
         <div className="mx-auto w-full max-w-7xl px-4 pb-4 pt-20 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-semibold tracking-tight text-text-primary lg:text-4xl">
-            Những khách hàng của chúng tôi
+            {t.sectionTitle}
           </h2>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-text-secondary">
-            Các case đồng hành thực tế với đầy đủ dữ liệu, ngành nghề và kết quả chuyển đổi trong vận hành.
-          </p>
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-text-secondary">{t.sectionDesc}</p>
         </div>
       )}
 
@@ -106,7 +103,7 @@ function PartnerShowcaseSectionContent({ showHero = true, containerClassName = "
                       : "border-border bg-surface-card text-text-secondary hover:border-brand-ring hover:text-brand"
                   }`}
                 >
-                  {ind}
+                  {ind === "All" ? t.filterAll : ind}
                 </button>
               ))}
             </div>
@@ -181,7 +178,7 @@ function PartnerShowcaseSectionContent({ showHero = true, containerClassName = "
                       <p className="mb-4 line-clamp-2 text-sm text-text-secondary">{p.description}</p>
 
                       <div className="flex translate-y-2 transform items-center text-xs font-bold text-brand opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                        VIEW CASE STUDY <iconify-icon icon="solar:arrow-right-linear" width={14} className="ml-1" />
+                        {t.viewCaseStudy} <iconify-icon icon="solar:arrow-right-linear" width={14} className="ml-1" />
                       </div>
                     </div>
                   </>
@@ -225,7 +222,7 @@ function PartnerShowcaseSectionContent({ showHero = true, containerClassName = "
       {selectedPartner && (
         <div
           id="modal-overlay"
-          className={`fixed inset-0 z-50 ${isModalOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+          className={`fixed inset-0 z-[100] ${isModalOpen ? "pointer-events-auto" : "pointer-events-none"}`}
           aria-labelledby="modal-title"
           role="dialog"
           aria-modal="true"
@@ -255,7 +252,7 @@ function PartnerShowcaseSectionContent({ showHero = true, containerClassName = "
                     className="absolute right-4 top-4 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md transition-colors hover:bg-white/40 sm:right-6 sm:top-6"
                     onClick={closeModal}
                   >
-                    <span className="sr-only">Close panel</span>
+                    <span className="sr-only">{t.close}</span>
                     <iconify-icon icon="solar:close-circle-linear" width={24} stroke-width="1.5" />
                   </button>
                   <div className="absolute bottom-4 left-4 right-4 text-white sm:bottom-6 sm:left-6 sm:right-6">
@@ -272,7 +269,7 @@ function PartnerShowcaseSectionContent({ showHero = true, containerClassName = "
                   <div className="mx-auto max-w-3xl space-y-8">
                     <section className="rounded-2xl border border-border bg-surface-section p-5">
                       <h3 className="mb-3 flex items-center gap-2 text-sm font-medium uppercase tracking-wider text-text-primary">
-                        <iconify-icon icon="solar:info-circle-linear" className="text-brand" /> Tổng quan
+                        <iconify-icon icon="solar:info-circle-linear" className="text-brand" /> {t.overview}
                       </h3>
                       <p className="text-sm leading-relaxed text-text-secondary sm:text-base">
                         {selectedPartner.description}
@@ -280,14 +277,14 @@ function PartnerShowcaseSectionContent({ showHero = true, containerClassName = "
                     </section>
 
                     <section className="rounded-2xl border border-border p-5">
-                      <h3 className="mb-5 text-lg font-medium tracking-tight text-text-primary">Hành trình chuyển đổi</h3>
+                      <h3 className="mb-5 text-lg font-medium tracking-tight text-text-primary">{t.journey}</h3>
                       <div className="grid gap-4 sm:grid-cols-2">
                         <div className="rounded-xl border border-border bg-surface-section p-4">
                           <div className="mb-3 flex items-center gap-3">
                             <div className="ring-border flex h-8 w-8 items-center justify-center rounded-full bg-surface-card text-state-danger ring-1">
                               <iconify-icon icon="solar:danger-triangle-linear" width={18} />
                             </div>
-                            <h4 className="text-sm font-semibold text-text-primary">Hiện trạng</h4>
+                            <h4 className="text-sm font-semibold text-text-primary">{t.before}</h4>
                           </div>
                           <p className="text-sm leading-relaxed text-text-secondary">{selectedPartner.before}</p>
                         </div>
@@ -297,7 +294,7 @@ function PartnerShowcaseSectionContent({ showHero = true, containerClassName = "
                             <div className="ring-brand-ring flex h-8 w-8 items-center justify-center rounded-full bg-surface-card text-brand ring-1">
                               <iconify-icon icon="solar:magic-stick-3-linear" width={18} />
                             </div>
-                            <h4 className="text-sm font-semibold text-text-primary">Giải pháp SunPrime</h4>
+                            <h4 className="text-sm font-semibold text-text-primary">{t.solution}</h4>
                           </div>
                           <p className="text-sm leading-relaxed text-text-secondary">{selectedPartner.solution}</p>
                         </div>
@@ -306,7 +303,7 @@ function PartnerShowcaseSectionContent({ showHero = true, containerClassName = "
 
                     <section className="rounded-2xl border border-border bg-surface-section p-5">
                       <h3 className="mb-4 text-center text-xs font-medium uppercase tracking-widest text-text-muted">
-                        Chỉ số tác động
+                        {t.metrics}
                       </h3>
                       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                         {selectedPartner.metrics.map((m) => (
@@ -320,7 +317,7 @@ function PartnerShowcaseSectionContent({ showHero = true, containerClassName = "
 
                     <div className="pb-2">
                       <button className="bg-button-primary text-button-text hover:bg-button-primary-hover focus-visible:outline-brand flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium shadow-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
-                        Xem chi tiết case study
+                        {t.detailCta}
                         <iconify-icon icon="solar:arrow-right-linear" width={16} />
                       </button>
                     </div>
