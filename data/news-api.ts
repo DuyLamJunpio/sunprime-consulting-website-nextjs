@@ -14,6 +14,7 @@ type NewsApiItem = {
   cover_image?: string | null;
   coverImage?: string | null;
   featured_image?: string | null;
+  cover_image_url?: string | null;
 };
 
 type NewsApiResponse = {
@@ -92,6 +93,7 @@ const estimateReadTime = (plainText: string) => {
 
 const extractImage = (item: NewsApiItem) => {
   const candidates = [
+    item.cover_image_url,
     item.image,
     item.image_url,
     item.thumbnail,

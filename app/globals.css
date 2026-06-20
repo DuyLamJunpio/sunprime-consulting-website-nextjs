@@ -89,6 +89,8 @@
 /* Style nội dung bài viết HTML (render từ API qua dangerouslySetInnerHTML) */
 .prose-news p {
   margin-bottom: 1.1rem;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .prose-news h1,
@@ -139,10 +141,22 @@
 }
 
 .prose-news img {
+  display: block;
   border-radius: 1rem;
-  margin: 1.25rem 0;
+  margin: 1.5rem auto;
   max-width: 100%;
   height: auto;
+  border: 1px solid var(--color-border, #e8ddd2);
+  box-shadow: 0 8px 24px rgba(42, 33, 27, 0.08);
+}
+
+/* Chú thích ảnh: đoạn ngay sau ảnh, in nghiêng, canh giữa, chữ nhỏ */
+.prose-news img + p {
+  margin-top: -0.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-style: italic;
+  color: var(--color-text-muted, #8a7a6c);
 }
 
 .prose-news blockquote {
