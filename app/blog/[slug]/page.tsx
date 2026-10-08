@@ -22,6 +22,9 @@ export async function generateMetadata({ params }: BlogDetailProps): Promise<Met
   return {
     title: post.title,
     description: post.excerpt,
+    // Cùng bài viết với /tin-tuc/[slug]: canonical về bản tin tức, không lập chỉ mục bản blog.
+    alternates: { canonical: `/tin-tuc/${post.slug}` },
+    robots: { index: false, follow: true },
   };
 }
 

@@ -58,10 +58,12 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathname]);
 
-  // Đóng menu mobile khi chuyển trang
-  useEffect(() => {
+  // Đóng menu mobile khi chuyển trang (điều chỉnh state ngay lúc render, không cần effect)
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
     setIsMobileMenuOpen(false);
-  }, [pathname]);
+  }
 
   // Khóa scroll nền + đóng bằng phím Escape khi menu mobile mở
   useEffect(() => {

@@ -94,7 +94,7 @@ export default function ContactContent() {
   const t = messages[lang].contact;
   const vi = lang === "vi";
   const officeAddress = vi
-    ? "Tầng 6, Toà nhà dầu khí, Số 2 đường 30-4, Phường Hoà Cường, TP Đà Nẵng, Việt Nam"
+    ? "Tầng 6, Tòa nhà dầu khí, Số 2 đường 30-4, Phường Hòa Cường, TP Đà Nẵng, Việt Nam"
     : "6th Floor, Petroleum Building, 2 30-4 Street, Hoa Cuong Ward, Da Nang, Vietnam";
 
   return (

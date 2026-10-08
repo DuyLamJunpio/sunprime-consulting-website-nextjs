@@ -4,9 +4,11 @@ import { Partner, partners } from "@/data/partners";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useI18n } from "@/components/i18n-provider";
 import { messages } from "@/lib/i18n/messages";
+
+const subscribeNoop = () => () => {};
 
 type PartnerShowcaseSectionProps = {
   showHero?: boolean;
@@ -26,9 +28,8 @@ function PartnerShowcaseSectionContent({ showHero = true, containerClassName = "
   }, [partnerId]);
   const [selectedPartner, setSelectedPartner] = useState<Partner | null>(() => initialPartner);
   const [isModalOpen, setIsModalOpen] = useState(() => Boolean(initialPartner));
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  // Chỉ render portal sau khi đã chạy ở client (server snapshot = false, client = true).
+  const mounted = useSyncExternalStore(subscribeNoop, () => true, () => false);
 
   // Khóa scroll nền khi modal mở
   useEffect(() => {

@@ -49,21 +49,20 @@ const openAppThenFallback = (appUrl: string, webUrl: string) => {
 
 export default function ContactFloatingButtons() {
   const pathname = usePathname();
-  const [isVisible, setIsVisible] = useState(pathname !== "/");
+  // Trên trang chủ chỉ hiện nút sau khi cuộn qua hero; các trang khác luôn hiện.
+  const [isPastHero, setIsPastHero] = useState(false);
+  const isVisible = pathname !== "/" || isPastHero;
 
   useEffect(() => {
     const heroElement = document.getElementById("hero-section");
 
-    if (!heroElement || pathname !== "/") {
-      setIsVisible(true);
-      return;
-    }
+    if (!heroElement || pathname !== "/") return;
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const heroBottom = heroElement.offsetTop + heroElement.offsetHeight;
       const triggerOffset = 80;
-      setIsVisible(currentScrollY + triggerOffset >= heroBottom);
+      setIsPastHero(currentScrollY + triggerOffset >= heroBottom);
     };
 
     handleScroll();

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { getServiceCategories } from "@/data/services";
 import { useI18n } from "@/components/i18n-provider";
+import { showSampleContent } from "@/lib/feature-flags";
 import { messages } from "@/lib/i18n/messages";
 
 export default function ServicesListContent() {
@@ -48,13 +49,15 @@ export default function ServicesListContent() {
               {t.consultNow}
               <iconify-icon icon="solar:phone-linear" width={16} />
             </Link>
-            <Link
-              href="/stories"
-              className="inline-flex items-center gap-2 rounded-lg border border-white/40 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/20"
-            >
-              {t.viewCaseStudy}
-              <iconify-icon icon="solar:arrow-right-up-linear" width={16} />
-            </Link>
+            {showSampleContent && (
+              <Link
+                href="/stories"
+                className="inline-flex items-center gap-2 rounded-lg border border-white/40 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/20"
+              >
+                {t.viewCaseStudy}
+                <iconify-icon icon="solar:arrow-right-up-linear" width={16} />
+              </Link>
+            )}
           </div>
           <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {overviewStats.map((stat) => (

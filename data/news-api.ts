@@ -1,3 +1,5 @@
+import { sanitizeArticleHtml } from '@/lib/sanitize';
+
 type NewsApiItem = {
   news_id: string;
   title: string;
@@ -109,7 +111,7 @@ const extractImage = (item: NewsApiItem) => {
 
 const toNewsPost = (item: NewsApiItem): NewsPost => {
   const publishedAt = item.published_at ?? item.created_at ?? new Date().toISOString();
-  const content = item.content?.trim() ?? ''; // HTML thô, dùng render trang chi tiết
+  const content = sanitizeArticleHtml(item.content?.trim() ?? ''); // HTML đã lọc (allowlist), dùng render trang chi tiết
   const plainText = stripHtml(content); // text thuần cho excerpt / read time
   const slugBase = toSlug(item.title || `tin-tuc-${item.news_id}`);
   const pinnedOrderRaw = Number(item.pinned_order);

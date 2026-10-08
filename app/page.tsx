@@ -5,6 +5,7 @@ import { getAllServices, getServiceCategories } from "@/data/services";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { showSampleContent } from "@/lib/feature-flags";
 
 export default function Home() {
   const { lang } = useI18n();
@@ -15,7 +16,7 @@ export default function Home() {
   ];
   const heroServiceCategories = useMemo(
     () =>
-      ["ke-toan", "thanh-lap", "nhan-su"]
+      ["ke-toan", "thanh-lap", "nhan-su", "giai-phap-so", "marketing"]
         .map((categoryId) => getServiceCategories(lang).find((category) => category.id === categoryId))
         .filter((category): category is NonNullable<typeof category> => Boolean(category)),
     [lang]
@@ -46,11 +47,15 @@ export default function Home() {
       "ke-toan": "Kế toán",
       "thanh-lap": "Thành lập doanh nghiệp",
       "nhan-su": "Nhân sự",
+      "giai-phap-so": "Giải pháp số",
+      "marketing": "Marketing",
     }
     : {
       "ke-toan": "Accounting",
       "thanh-lap": "Business Setup",
       "nhan-su": "Human Resources",
+      "giai-phap-so": "Digital Solutions",
+      "marketing": "Marketing",
     };
 
   // Chuỗi giao diện trang chủ theo ngôn ngữ.
@@ -189,6 +194,7 @@ export default function Home() {
     };
 
   useEffect(() => {
+    if (!showSampleContent) return;
     const intervalId = window.setInterval(() => {
       setHeroUpdateIndex((prev) => (prev + 1) % heroUpdates.length);
     }, 3000);
@@ -469,6 +475,11 @@ export default function Home() {
             </Link>
 
             <div className="relative mt-2 max-w-3xl">
+              <h1 className="sr-only">
+                {lang === "vi"
+                  ? "SunPrime Consulting - Giải pháp kế toán, pháp lý và vận hành doanh nghiệp tại Đà Nẵng"
+                  : "SunPrime Consulting - Accounting, legal and business operations solutions in Da Nang"}
+              </h1>
               <div className="space-y-1">
                 {heroServiceCategories.map((category) => (
                   <Link
@@ -488,14 +499,17 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="absolute bottom-4 right-4 z-20 max-w-[320px] rounded-lg border border-white/25 bg-brand-ink/55 px-3 py-2 text-white backdrop-blur-sm sm:bottom-6 sm:right-6">
-          <p className="text-[10px] uppercase tracking-widest text-white/80">{lang === "vi" ? "Thông tin mới" : "Latest updates"}</p>
-          <p key={heroUpdateIndex} className="mt-1 text-xs leading-relaxed text-white animate-fade-up">
-            {heroUpdates[heroUpdateIndex]}
-          </p>
-        </div>
+        {showSampleContent && (
+          <div className="absolute bottom-4 right-4 z-20 max-w-[320px] rounded-lg border border-white/25 bg-brand-ink/55 px-3 py-2 text-white backdrop-blur-sm sm:bottom-6 sm:right-6">
+            <p className="text-[10px] uppercase tracking-widest text-white/80">{lang === "vi" ? "Thông tin mới" : "Latest updates"}</p>
+            <p key={heroUpdateIndex} className="mt-1 text-xs leading-relaxed text-white animate-fade-up">
+              {heroUpdates[heroUpdateIndex]}
+            </p>
+          </div>
+        )}
       </main>
 
+      {showSampleContent && (
       <section className="relative overflow-hidden bg-brand py-12">
         <div className="pointer-events-none absolute inset-0 opacity-[0.14] [background-image:linear-gradient(rgba(255,255,255,0.24)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.24)_1px,transparent_1px)] [background-size:34px_34px]" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -544,6 +558,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      )}
 
       <section className="relative overflow-hidden bg-white py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -706,6 +721,7 @@ export default function Home() {
         </div>
       </section>
 
+      {showSampleContent && (
       <section className="relative overflow-hidden bg-white py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-14 lg:flex-row lg:items-start lg:gap-16">
@@ -762,7 +778,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+      )}
 
+      {showSampleContent && (
       <section className="relative overflow-hidden bg-linear-to-br from-brand/20 via-brand/10 to-surface-base py-24">
         <div className="pointer-events-none absolute inset-0 opacity-[0.1] [background-image:linear-gradient(rgba(156,90,52,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(156,90,52,0.14)_1px,transparent_1px)] [background-size:34px_34px]" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -858,7 +876,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+      )}
 
+      {showSampleContent && (
       <section className="relative overflow-hidden bg-surface-section pb-24 pt-24">
         <div className="pointer-events-none absolute inset-0 opacity-[0.1] [background-image:linear-gradient(rgba(156,90,52,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(156,90,52,0.16)_1px,transparent_1px)] [background-size:34px_34px]" />
         <div className="relative z-10 mx-auto mb-12 flex max-w-7xl flex-col items-end justify-between gap-6 px-4 sm:px-6 md:flex-row lg:px-8">
@@ -901,6 +921,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      )}
 
       <section className="bg-white py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -973,12 +994,12 @@ export default function Home() {
               <p className="mb-10 text-lg font-normal text-text-inverse">
                 {th.ctaDesc}
               </p>
-              <a
-                href="#"
+              <Link
+                href="/contact"
                 className="inline-flex items-center justify-center rounded-lg border border-transparent bg-button-text-dark px-8 py-3.5 text-base font-semibold text-text-inverse transition-all duration-200 hover:bg-text-primary hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-border-strong focus:ring-offset-2"
               >
                 {th.ctaButton}
-              </a>
+              </Link>
             </div>
 
             <div className="relative w-full lg:w-1/2">

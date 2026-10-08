@@ -19,6 +19,14 @@ export const messages = {
       description:
         "Đồng hành cùng doanh nghiệp về pháp lý, kế toán và vận hành với quy trình rõ ràng, chi phí minh bạch.",
       taxLabel: "Mã số thuế:",
+      legalTitle: "Thông tin pháp lý",
+      internationalNameLabel: "Tên quốc tế:",
+      representativeLabel: "Người đại diện:",
+      foundingDateLabel: "Ngày hoạt động:",
+      businessTypeLabel: "Loại hình:",
+      businessType: "Công ty trách nhiệm hữu hạn ngoài nhà nước",
+      statusLabel: "Tình trạng:",
+      status: "Đang hoạt động",
       portalButton: "Cổng B2B SunPrime",
       contactInfo: "Thông tin liên hệ",
       workingHours: "Giờ làm việc",
@@ -40,7 +48,7 @@ export const messages = {
       ctaServices: "Tìm hiểu dịch vụ của chúng tôi",
       aboutTitle: "Về chúng tôi",
       aboutBody:
-        "Sun Prime Consulting là đơn vị tư vấn doanh nghiệp chuyên về thành lập, pháp lý, kế toán và vận hành. Chúng tôi đồng hành cùng doanh nghiệp xây dựng nền tảng chuẩn luật - rõ số - vững hệ thống, đặc biệt trong lĩnh vực nhà hàng - khách sạn.",
+        "Sun Prime cung cấp hệ sinh thái giải pháp toàn diện, giúp doanh nghiệp xây dựng nền tảng pháp lý vững chắc, vận hành tài chính lành mạnh và quản trị chặt chẽ để hoạt động bền vững tại Việt Nam. Từ thành lập doanh nghiệp, tuân thủ pháp lý đến kế toán, thuế, tài chính, giải pháp số và marketing, chúng tôi hỗ trợ thực tế để doanh nghiệp đặt nền móng vững và vận hành hiệu quả, đặc biệt trong lĩnh vực nhà hàng - khách sạn.",
       visionMissionTitle: "Tầm nhìn và sứ mệnh",
       visionTitle: "Tầm nhìn",
       visionBody:
@@ -123,7 +131,7 @@ export const messages = {
     },
     services: {
       heroTitle:
-        "Thiết kế lại toàn bộ nền tảng kế toán, pháp lý và nhân sự theo chuẩn tăng trưởng bền vững.",
+        "Giải pháp tích hợp cho doanh nghiệp tại Việt Nam: từ thành lập, tuân thủ, kế toán - thuế - tài chính đến giải pháp số và marketing.",
       heroDesc:
         "Mỗi gói dịch vụ được đóng gói theo mục tiêu vận hành thực tế, có đầu ra rõ ràng, checklist bàn giao, và lộ trình triển khai minh bạch.",
       consultNow: "Nhận tư vấn ngay",
@@ -209,6 +217,14 @@ export const messages = {
       description:
         "We accompany businesses in legal, accounting and operations with clear processes and transparent costs.",
       taxLabel: "Tax code:",
+      legalTitle: "Legal information",
+      internationalNameLabel: "International name:",
+      representativeLabel: "Legal representative:",
+      foundingDateLabel: "Operating since:",
+      businessTypeLabel: "Company type:",
+      businessType: "Private limited liability company",
+      statusLabel: "Status:",
+      status: "Active",
       portalButton: "SunPrime B2B Portal",
       contactInfo: "Contact information",
       workingHours: "Working hours",
@@ -230,7 +246,7 @@ export const messages = {
       ctaServices: "Explore our services",
       aboutTitle: "About us",
       aboutBody:
-        "Sun Prime Consulting is a business advisory firm specializing in company formation, legal, accounting and operations. We help businesses build a compliant, clearly-measured and well-structured foundation, especially in the restaurant and hospitality industry.",
+        "Sun Prime provides a comprehensive ecosystem of solutions, helping businesses establish a strong legal foundation, sound financial operations, and robust governance for sustainable operations in Vietnam. From company establishment and regulatory compliance to accounting, tax, finance, digital solutions and marketing, we provide practical support so businesses can build a solid foundation and operate effectively, especially in the restaurant and hospitality industry.",
       visionMissionTitle: "Vision and mission",
       visionTitle: "Vision",
       visionBody:
@@ -313,7 +329,7 @@ export const messages = {
     },
     services: {
       heroTitle:
-        "Redesign your entire accounting, legal and HR foundation to a standard built for sustainable growth.",
+        "Integrated solutions for businesses in Vietnam: from company establishment and compliance to accounting, tax, finance, digital solutions and marketing.",
       heroDesc:
         "Each service package is built around real operational goals, with clear outputs, a delivery checklist and a transparent rollout roadmap.",
       consultNow: "Get advice now",

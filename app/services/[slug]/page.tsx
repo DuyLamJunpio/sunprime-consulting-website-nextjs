@@ -1,6 +1,7 @@
 import { getServiceBySlug, serviceSlugs } from '@/data/services';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { serializeJsonLd } from '@/lib/json-ld';
 import { absoluteUrl, siteConfig } from '@/lib/site';
 import ServiceDetailContent from '@/components/services/service-detail-content';
 
@@ -108,7 +109,7 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
       <ServiceDetailContent slug={slug} />
     </>

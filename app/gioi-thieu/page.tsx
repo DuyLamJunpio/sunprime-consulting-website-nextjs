@@ -1,5 +1,6 @@
 import PartnerShowcaseSection from "@/components/partner-showcase-section";
 import AboutContent from "@/components/about/about-content";
+import { showSampleContent } from "@/lib/feature-flags";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export default function AboutPage() {
   return (
     <main className="bg-surface-base">
       <AboutContent />
-      <PartnerShowcaseSection showHero={false} />
+      {showSampleContent && <PartnerShowcaseSection showHero={false} />}
     </main>
   );
 }

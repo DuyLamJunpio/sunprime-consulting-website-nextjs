@@ -1,6 +1,7 @@
 import { fetchAllNewsPosts } from '@/data/news-api';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { serializeJsonLd } from '@/lib/json-ld';
 import { absoluteUrl, siteConfig } from '@/lib/site';
 import NewsDetailContent from '@/components/news/news-detail-content';
 
@@ -71,7 +72,7 @@ export default async function NewsDetailPage({ params }: NewsDetailProps) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(articleJsonLd) }}
       />
       <NewsDetailContent post={post} relatedPosts={relatedPosts} />
     </>

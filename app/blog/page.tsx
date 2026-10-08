@@ -6,7 +6,9 @@ export const metadata: Metadata = {
   title: 'Blog SunPrime',
   description:
     'Chuyên mục Blog SunPrime chia sẻ kiến thức tài chính, kế toán, pháp lý và vận hành cho doanh nghiệp.',
-  alternates: { canonical: '/blog' },
+  // /blog dùng chung nguồn bài viết với /tin-tuc nên không lập chỉ mục, tránh trùng lặp nội dung.
+  alternates: { canonical: '/tin-tuc' },
+  robots: { index: false, follow: true },
 };
 
 const normalizeText = (value: string) =>

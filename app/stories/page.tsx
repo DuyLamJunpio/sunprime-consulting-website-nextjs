@@ -1,5 +1,7 @@
 import PartnerShowcaseSection from "@/components/partner-showcase-section";
+import { showSampleContent } from "@/lib/feature-flags";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Khách hàng & đối tác",
@@ -16,5 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default function PartnerShowcasePage() {
+  // Dữ liệu khách hàng/đối tác hiện là nội dung mẫu: ẩn cho đến khi có case study thật.
+  if (!showSampleContent) notFound();
   return <PartnerShowcaseSection showHero />;
 }

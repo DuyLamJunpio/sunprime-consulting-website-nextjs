@@ -11,8 +11,17 @@ export default function SiteFooter() {
   const t = messages[lang].footer;
   const address =
     lang === "vi"
-      ? "Tầng 6, Toà nhà dầu khí, Số 2 đường 30-4, Phường Hoà Cường, TP Đà Nẵng, Việt Nam"
+      ? "Tầng 6, Tòa nhà dầu khí, Số 2 đường 30-4, Phường Hòa Cường, TP Đà Nẵng, Việt Nam"
       : "6th Floor, Petroleum Building, 2 30-4 Street, Hoa Cuong Ward, Da Nang, Vietnam";
+  const [year, month, day] = siteConfig.foundingDate.split("-");
+  const legalRows = [
+    { label: t.internationalNameLabel, value: siteConfig.internationalName },
+    { label: t.taxLabel, value: siteConfig.taxId },
+    { label: t.representativeLabel, value: siteConfig.representative },
+    { label: t.foundingDateLabel, value: `${day}/${month}/${year}` },
+    { label: t.businessTypeLabel, value: t.businessType },
+    { label: t.statusLabel, value: t.status },
+  ];
 
   return (
     <footer className="border-t border-border-soft bg-surface-section pb-12 pt-20">
@@ -97,14 +106,14 @@ export default function SiteFooter() {
                 </a>
               </li>
               <li>
-                <a href="#" className="transition-colors hover:text-brand">
+                <Link href="/chinh-sach-bao-mat" className="transition-colors hover:text-brand">
                   {t.privacy}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="transition-colors hover:text-brand">
+                <Link href="/dieu-khoan-su-dung" className="transition-colors hover:text-brand">
                   {t.terms}
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -144,6 +153,19 @@ export default function SiteFooter() {
           </div>
         </div>
 
+        {/* Legal information */}
+        <div className="mb-10 border-t border-border-soft pt-10">
+          <h3 className="mb-4 font-semibold tracking-tight text-text-primary">{t.legalTitle}</h3>
+          <dl className="grid grid-cols-1 gap-x-8 gap-y-2 text-sm font-medium text-text-muted md:grid-cols-2">
+            {legalRows.map(({ label, value }) => (
+              <div key={label} className="flex flex-wrap gap-x-2">
+                <dt className="font-semibold text-text-secondary">{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
         {/* Bottom Footer */}
         <div className="flex flex-col items-start justify-between gap-8 border-t border-border-soft pt-10 md:flex-row md:items-center">
           <div className="text-xs font-medium leading-relaxed text-text-muted">
@@ -152,15 +174,15 @@ export default function SiteFooter() {
           </div>
 
           <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm font-medium text-text-muted">
-            <a href="#" className="transition-colors hover:text-text-primary">
+            <Link href="/chinh-sach-bao-mat" className="transition-colors hover:text-text-primary">
               {t.privacy}
-            </a>
-            <a href="#" className="transition-colors hover:text-text-primary">
+            </Link>
+            <Link href="/dieu-khoan-su-dung" className="transition-colors hover:text-text-primary">
               {t.terms}
-            </a>
-            <a href="#" className="transition-colors hover:text-text-primary">
+            </Link>
+            <Link href="/chinh-sach-cookie" className="transition-colors hover:text-text-primary">
               {t.cookie}
-            </a>
+            </Link>
           </div>
 
           <div className="flex items-center gap-6">

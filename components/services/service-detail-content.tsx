@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { getServiceBySlug, getServiceCategories } from "@/data/services";
 import { useI18n } from "@/components/i18n-provider";
+import { showSampleContent } from "@/lib/feature-flags";
 import { messages } from "@/lib/i18n/messages";
 
 export default function ServiceDetailContent({ slug }: { slug: string }) {
@@ -294,16 +295,18 @@ export default function ServiceDetailContent({ slug }: { slug: string }) {
                   </a>
                 </div>
               </div>
-              <div className="rounded-2xl border border-white/25 bg-white/10 p-6 backdrop-blur">
-                <p className="text-sm text-white/80">{testimonial.quote}</p>
-                <div className="mt-6 flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-white/75" />
-                  <div>
-                    <p className="text-sm font-semibold text-white">{testimonial.name}</p>
-                    <p className="text-xs text-white/80">{testimonial.role}</p>
+              {showSampleContent && (
+                <div className="rounded-2xl border border-white/25 bg-white/10 p-6 backdrop-blur">
+                  <p className="text-sm text-white/80">{testimonial.quote}</p>
+                  <div className="mt-6 flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-white/75" />
+                    <div>
+                      <p className="text-sm font-semibold text-white">{testimonial.name}</p>
+                      <p className="text-xs text-white/80">{testimonial.role}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -315,7 +318,7 @@ export default function ServiceDetailContent({ slug }: { slug: string }) {
                   <h3 className="mt-2 text-2xl font-semibold text-text-primary">{t.fitTitle}</h3>
                 </div>
                 <Link href="/services" className="text-sm font-medium text-text-secondary transition hover:text-brand">
-                  {t.viewCaseStudy} →
+                  {lang === "vi" ? "Xem tất cả dịch vụ" : "View all services"} →
                 </Link>
               </div>
               <div className="grid gap-4 md:grid-cols-3">

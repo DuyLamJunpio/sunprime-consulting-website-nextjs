@@ -1,4 +1,11 @@
 import type { Lang } from "@/lib/i18n/messages";
+import {
+  mergeProfileServices,
+  profileCategoriesEn,
+  profileCategoriesVi,
+  profileOfferingsEn,
+  profileOfferingsVi,
+} from "@/data/services-profile";
 
 export type ServiceStat = {
   label: string;
@@ -33,7 +40,7 @@ export type ServiceCategory = {
   services: ServiceOffering[];
 };
 
-export const serviceCategories: ServiceCategory[] = [
+const baseServiceCategories: ServiceCategory[] = [
   {
     id: 'ke-toan',
     title: 'Kế toán',
@@ -67,11 +74,17 @@ export const serviceCategories: ServiceCategory[] = [
         heroDescription: 'Đảm bảo doanh nghiệp kê khai đúng hạn và quyết toán chuẩn theo quy định hiện hành.',
         excerpt: 'Dịch vụ kê khai và quyết toán thuế giúp giảm rủi ro phạt chậm nộp.',
         stats: [
-          { label: 'Nhắc hạn', value: '100%' },
+          { label: 'Nhắc hạn', value: 'Trước mỗi kỳ kê khai' },
           { label: 'Thời gian xử lý', value: '1-2 ngày/kỳ' },
         ],
         benefits: ['Không trễ hạn kê khai', 'Hỗ trợ giải trình khi thanh tra', 'Cập nhật chính sách thuế mới'],
-        deliverables: ['Lập tờ khai GTGT/TNCN/TNDN', 'Nộp hồ sơ điện tử', 'Chuẩn bị hồ sơ quyết toán'],
+        deliverables: [
+          'Kê khai thuế & kế toán hàng tháng / quý',
+          'Quyết toán thuế doanh nghiệp',
+          'Quyết toán thuế thu nhập cá nhân (TNCN)',
+          'Đăng ký người phụ thuộc',
+          'Hủy mã số thuế cá nhân',
+        ],
         process: [
           { title: 'Rà soát', description: 'Kiểm tra dữ liệu hóa đơn và bút toán thuế.' },
           { title: 'Kê khai', description: 'Lập tờ khai và nộp đúng hạn.' },
@@ -89,7 +102,12 @@ export const serviceCategories: ServiceCategory[] = [
           { label: 'Phạm vi', value: '12-24 tháng dữ liệu' },
         ],
         benefits: ['Số liệu sạch, dễ kiểm soát', 'Sẵn sàng cho kiểm toán', 'Giảm rủi ro sai lệch'],
-        deliverables: ['Phân loại chứng từ', 'Lập nhật ký và sổ chi tiết', 'Đối chiếu số liệu tổng hợp'],
+        deliverables: [
+          'Lập và lưu trữ sổ sách, chứng từ kế toán',
+          'Báo cáo tài chính cuối năm & hồ sơ quyết toán thuế',
+          'In và đóng quyển sổ sách, báo cáo tài chính, chứng từ',
+          'Lập và in hóa đơn bán hàng, chi phí',
+        ],
         process: [
           { title: 'Thu thập', description: 'Tiếp nhận dữ liệu và chứng từ liên quan.' },
           { title: 'Hạch toán', description: 'Lập sổ chi tiết và sổ tổng hợp.' },
@@ -107,7 +125,7 @@ export const serviceCategories: ServiceCategory[] = [
           { label: 'Bàn giao', value: '72h sau chốt số liệu' },
         ],
         benefits: ['Dễ đọc, dễ hành động', 'Theo dõi KPI trọng yếu', 'Hỗ trợ kế hoạch tài chính'],
-        deliverables: ['BCTC theo quy định', 'Dashboard quản trị', 'Báo cáo phân tích xu hướng'],
+        deliverables: ['BCTC theo quy định', 'Dashboard quản trị', 'Báo cáo phục vụ vay vốn / tài trợ ngân hàng'],
         process: [
           { title: 'Xác định KPI', description: 'Thống nhất chỉ số quản trị trọng tâm.' },
           { title: 'Lập báo cáo', description: 'Chuẩn hóa dữ liệu và dựng báo cáo.' },
@@ -121,8 +139,8 @@ export const serviceCategories: ServiceCategory[] = [
         heroDescription: 'Đồng hành cùng doanh nghiệp trong các buổi làm việc với cơ quan thuế.',
         excerpt: 'Giảm áp lực và rủi ro khi thanh kiểm tra thuế.',
         stats: [
-          { label: 'Tỷ lệ hồ sơ hoàn tất', value: '98%' },
-          { label: 'Phản hồi', value: '<24h' },
+          { label: 'Nội dung', value: 'Giải trình & làm việc' },
+          { label: 'Phạm vi', value: 'Việt Nam' },
         ],
         benefits: ['Chuẩn hồ sơ đầy đủ', 'Giải trình có chiến lược', 'Tiết kiệm thời gian lãnh đạo'],
         deliverables: ['Soạn công văn', 'Đại diện làm việc', 'Theo dõi kết quả xử lý'],
@@ -139,11 +157,17 @@ export const serviceCategories: ServiceCategory[] = [
         heroDescription: 'Kiểm tra toàn diện để phát hiện và xử lý sai lệch trước khi phát sinh truy thu.',
         excerpt: 'Rà soát rủi ro kế toán thuế bằng checklist chuyên sâu.',
         stats: [
-          { label: 'Tiêu chí kiểm tra', value: '72 điểm' },
+          { label: 'Nhóm rà soát', value: '5 hạng mục' },
           { label: 'Thời gian', value: '7-12 ngày' },
         ],
         benefits: ['Phát hiện sớm sai sót', 'Có lộ trình khắc phục', 'Nâng chuẩn kiểm soát nội bộ'],
-        deliverables: ['Báo cáo rủi ro', 'Danh mục bút toán điều chỉnh', 'Kế hoạch hành động 30-60-90'],
+        deliverables: [
+          'Đánh giá rủi ro thuế',
+          'Rà soát tuân thủ kế toán - thuế',
+          'Rà soát rủi ro quản trị doanh nghiệp',
+          'Nhận diện và đánh giá rủi ro tuân thủ tiềm ẩn',
+          'Khuyến nghị hành động khắc phục và giảm thiểu rủi ro',
+        ],
         process: [
           { title: 'Thu thập', description: 'Phỏng vấn và lấy mẫu dữ liệu.' },
           { title: 'Đánh giá', description: 'Chấm điểm rủi ro theo từng nhóm.' },
@@ -171,7 +195,13 @@ export const serviceCategories: ServiceCategory[] = [
           { label: 'Số lần ký', value: '01 bộ hồ sơ' },
         ],
         benefits: ['Chọn đúng loại hình', 'Rút ngắn thời gian xử lý', 'Giảm rủi ro thủ tục'],
-        deliverables: ['Tư vấn loại hình', 'Soạn hồ sơ đăng ký', 'Nộp và theo dõi kết quả'],
+        deliverables: [
+          'Thành lập công ty TNHH một thành viên',
+          'Thành lập công ty TNHH hai thành viên trở lên',
+          'Thành lập công ty cổ phần',
+          'Thành lập chi nhánh, văn phòng đại diện, địa điểm kinh doanh',
+          'Chuyển đổi từ hộ kinh doanh lên công ty',
+        ],
         process: [
           { title: 'Tư vấn', description: 'Phân tích nhu cầu và lựa chọn mô hình phù hợp.' },
           { title: 'Soạn hồ sơ', description: 'Chuẩn bị hồ sơ pháp lý đầy đủ.' },
@@ -250,7 +280,7 @@ export const serviceCategories: ServiceCategory[] = [
         excerpt: 'Quản lý hồ sơ BHXH - BHYT - BHTN trọn gói.',
         stats: [
           { label: 'Thời gian xử lý', value: '1-3 ngày' },
-          { label: 'Đúng hạn', value: '100%' },
+          { label: 'Chu kỳ kê khai', value: 'Hàng tháng' },
         ],
         benefits: ['Giảm rủi ro phạt nộp chậm', 'Theo dõi biến động lao động', 'Tối ưu quy trình BHXH'],
         deliverables: ['Kê khai tăng giảm lao động', 'Theo dõi đóng bảo hiểm', 'Hỗ trợ thủ tục chế độ'],
@@ -300,6 +330,13 @@ export const serviceCategories: ServiceCategory[] = [
   },
 ];
 
+/** Danh mục đầy đủ: dịch vụ gốc + dịch vụ theo SunPrime Company Profile (xem services-profile.ts). */
+export const serviceCategories: ServiceCategory[] = mergeProfileServices(
+  baseServiceCategories,
+  profileOfferingsVi,
+  profileCategoriesVi
+);
+
 export type FlattenedService = ServiceOffering & {
   categoryId: string;
   categoryTitle: string;
@@ -323,7 +360,7 @@ export const serviceSlugs = allServices.map((service) => service.slug);
  * Bản tiếng Anh — giữ NGUYÊN id/slug/accent/icon, chỉ dịch nội dung.
  * Dùng qua getServiceCategories(lang)/getServiceBySlug(slug, lang).
  */
-export const serviceCategoriesEn: ServiceCategory[] = [
+const baseServiceCategoriesEn: ServiceCategory[] = [
   {
     id: 'ke-toan',
     title: 'Accounting',
@@ -357,11 +394,17 @@ export const serviceCategoriesEn: ServiceCategory[] = [
         heroDescription: 'Ensure your business files on time and finalizes correctly under current regulations.',
         excerpt: 'Tax filing and finalization services that reduce the risk of late-payment penalties.',
         stats: [
-          { label: 'Deadline reminders', value: '100%' },
+          { label: 'Deadline reminders', value: 'Before each filing' },
           { label: 'Processing time', value: '1-2 days/period' },
         ],
         benefits: ['Never miss a filing deadline', 'Support during inspections', 'Stay updated on new tax policies'],
-        deliverables: ['Prepare VAT/PIT/CIT returns', 'Submit dossiers electronically', 'Prepare finalization files'],
+        deliverables: [
+          'Monthly / quarterly accounting & tax filing',
+          'Corporate tax finalization',
+          'Personal income tax (PIT) finalization',
+          'Dependent registration',
+          'Personal tax identification number (TIN) cancellation',
+        ],
         process: [
           { title: 'Review', description: 'Check invoice data and tax entries.' },
           { title: 'File', description: 'Prepare and submit returns on time.' },
@@ -379,7 +422,12 @@ export const serviceCategoriesEn: ServiceCategory[] = [
           { label: 'Scope', value: '12-24 months of data' },
         ],
         benefits: ['Clean, controllable figures', 'Audit-ready', 'Reduced risk of discrepancies'],
-        deliverables: ['Classify documents', 'Prepare journals and detailed ledgers', 'Reconcile consolidated figures'],
+        deliverables: [
+          'Preparation and upkeep of accounting books and records',
+          'Year-end financial statements and tax finalization documents',
+          'Printing and compilation of books, financial statements and supporting documents',
+          'Preparation and printing of sales and expense invoices',
+        ],
         process: [
           { title: 'Collect', description: 'Receive related data and documents.' },
           { title: 'Record', description: 'Prepare detailed and general ledgers.' },
@@ -397,7 +445,7 @@ export const serviceCategoriesEn: ServiceCategory[] = [
           { label: 'Delivery', value: '72h after closing' },
         ],
         benefits: ['Easy to read and act on', 'Track key KPIs', 'Support financial planning'],
-        deliverables: ['Statutory financial statements', 'Management dashboard', 'Trend analysis report'],
+        deliverables: ['Statutory financial statements', 'Management dashboard', 'Bank loan / financing reports'],
         process: [
           { title: 'Define KPIs', description: 'Agree on the key management metrics.' },
           { title: 'Build reports', description: 'Standardize data and build the reports.' },
@@ -411,8 +459,8 @@ export const serviceCategoriesEn: ServiceCategory[] = [
         heroDescription: 'Stand with your business during working sessions with the tax authorities.',
         excerpt: 'Reduce pressure and risk during tax inspections.',
         stats: [
-          { label: 'Dossier completion rate', value: '98%' },
-          { label: 'Response time', value: '<24h' },
+          { label: 'Scope', value: 'Explanations & meetings' },
+          { label: 'Coverage', value: 'Vietnam' },
         ],
         benefits: ['Complete, compliant dossiers', 'Strategic explanations', 'Save leadership time'],
         deliverables: ['Draft official letters', 'Represent in meetings', 'Track resolution outcomes'],
@@ -429,11 +477,17 @@ export const serviceCategoriesEn: ServiceCategory[] = [
         heroDescription: 'A comprehensive review to detect and fix discrepancies before they trigger back-taxes.',
         excerpt: 'Review accounting and tax risks with an in-depth checklist.',
         stats: [
-          { label: 'Review criteria', value: '72 points' },
+          { label: 'Review areas', value: '5 items' },
           { label: 'Duration', value: '7-12 days' },
         ],
         benefits: ['Detect errors early', 'A clear remediation roadmap', 'Stronger internal controls'],
-        deliverables: ['Risk report', 'List of adjusting entries', '30-60-90 action plan'],
+        deliverables: [
+          'Tax risk assessment',
+          'Accounting & tax compliance review',
+          'Corporate governance risk review',
+          'Identification and assessment of potential compliance risks',
+          'Recommendations for corrective actions and risk mitigation',
+        ],
         process: [
           { title: 'Collect', description: 'Interview and sample data.' },
           { title: 'Assess', description: 'Score risks by group.' },
@@ -461,7 +515,13 @@ export const serviceCategoriesEn: ServiceCategory[] = [
           { label: 'Signing', value: '01 dossier set' },
         ],
         benefits: ['Choose the right entity type', 'Shorten processing time', 'Reduce procedural risk'],
-        deliverables: ['Entity-type advice', 'Draft registration dossier', 'Submit and track results'],
+        deliverables: [
+          'Single-member LLC incorporation',
+          'Multi-member LLC incorporation',
+          'Joint stock company incorporation',
+          'Branches, representative offices and business locations',
+          'Conversion from household business to company',
+        ],
         process: [
           { title: 'Advise', description: 'Analyze needs and select the right model.' },
           { title: 'Draft dossier', description: 'Prepare the complete legal dossier.' },
@@ -540,7 +600,7 @@ export const serviceCategoriesEn: ServiceCategory[] = [
         excerpt: 'Full-service management of social, health and unemployment insurance records.',
         stats: [
           { label: 'Processing time', value: '1-3 days' },
-          { label: 'On time', value: '100%' },
+          { label: 'Filing cycle', value: 'Monthly' },
         ],
         benefits: ['Reduce late-filing penalties', 'Track workforce changes', 'Optimize the insurance process'],
         deliverables: ['File headcount increases/decreases', 'Track insurance contributions', 'Support benefit procedures'],
@@ -589,6 +649,12 @@ export const serviceCategoriesEn: ServiceCategory[] = [
     ],
   },
 ];
+
+export const serviceCategoriesEn: ServiceCategory[] = mergeProfileServices(
+  baseServiceCategoriesEn,
+  profileOfferingsEn,
+  profileCategoriesEn
+);
 
 const allServicesEn: FlattenedService[] = serviceCategoriesEn.flatMap((category) =>
   category.services.map((service) => ({

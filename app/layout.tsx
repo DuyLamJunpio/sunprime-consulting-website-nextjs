@@ -6,6 +6,7 @@ import SiteFooter from "@/components/footer";
 import ContactFloatingButtons from "@/components/contact";
 import ScrollReveal from "@/components/scroll-reveal";
 import I18nProvider from "@/components/i18n-provider";
+import { serializeJsonLd } from "@/lib/json-ld";
 import { siteConfig, absoluteUrl } from "@/lib/site";
 import "./globals.css";
 
@@ -56,10 +57,14 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
+  verification: {
+    other: {
+      "facebook-domain-verification": "08qb2oq7yjsxc9qzh9ywvomlc7m11c",
+    },
+  },
   openGraph: {
     title: "SunPrime Consulting | Kế toán, pháp lý doanh nghiệp",
-    description:
-      "Tư vấn pháp lý, kế toán và vận hành cho doanh nghiệp, đặc biệt trong lĩnh vực nhà hàng – khách sạn.",
+    description: siteConfig.description,
     type: "website",
     locale: "vi_VN",
     url: siteConfig.url,
@@ -68,8 +73,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "SunPrime Consulting | Kế toán, pháp lý doanh nghiệp",
-    description:
-      "Tư vấn pháp lý, kế toán và vận hành cho doanh nghiệp, đặc biệt trong lĩnh vực nhà hàng – khách sạn.",
+    description: siteConfig.description,
   },
 };
 
@@ -79,6 +83,8 @@ const organizationJsonLd = {
   "@id": absoluteUrl("/#organization"),
   name: siteConfig.name,
   legalName: siteConfig.legalName,
+  alternateName: siteConfig.internationalName,
+  foundingDate: siteConfig.foundingDate,
   url: siteConfig.url,
   description: siteConfig.description,
   email: siteConfig.email,
@@ -88,9 +94,9 @@ const organizationJsonLd = {
   logo: absoluteUrl(siteConfig.logo),
   address: {
     "@type": "PostalAddress",
-    streetAddress: siteConfig.address.street,
+    streetAddress: `${siteConfig.address.street}, ${siteConfig.address.district}`,
     addressLocality: siteConfig.address.city,
-    addressRegion: siteConfig.address.district,
+    addressRegion: siteConfig.address.city,
     addressCountry: siteConfig.address.country,
   },
   areaServed: "VN",
@@ -111,7 +117,7 @@ export default function RootLayout({
       <body className={`${inter.className} ${inter.variable} ${beVietnamPro.variable}`}>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(organizationJsonLd) }}
         />
         <I18nProvider>
           <ScrollReveal />
