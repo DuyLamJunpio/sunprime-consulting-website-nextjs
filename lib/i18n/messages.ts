@@ -38,6 +38,8 @@ export const messages = {
       cookie: "Chính sách cookie",
       follow: "Theo dõi chúng tôi",
       rights: "Mọi quyền được bảo lưu.",
+      copyrightNotice:
+        "Website được bảo vệ bản quyền. Nghiêm cấm sao chép, đăng tải lại nội dung, hình ảnh dưới mọi hình thức khi chưa có sự đồng ý bằng văn bản của SunPrime Consulting.",
     },
     about: {
       eyebrow: "Giới thiệu SunPrime",
@@ -236,6 +238,8 @@ export const messages = {
       cookie: "Cookie Policy",
       follow: "Follow us",
       rights: "All rights reserved.",
+      copyrightNotice:
+        "This website is protected by copyright. Copying or republishing its content or images in any form without the written consent of SunPrime Consulting is prohibited.",
     },
     about: {
       eyebrow: "About SunPrime",

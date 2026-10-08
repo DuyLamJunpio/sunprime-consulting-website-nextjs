@@ -3,6 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
+import FooterCertifications from "@/components/footer-certifications";
+import FooterTrustBadges from "@/components/footer-trust-badges";
 import { useI18n } from "@/components/i18n-provider";
 import { messages } from "@/lib/i18n/messages";
 
@@ -153,6 +155,8 @@ export default function SiteFooter() {
           </div>
         </div>
 
+        <FooterCertifications />
+
         {/* Legal information */}
         <div className="mb-10 border-t border-border-soft pt-10">
           <h3 className="mb-4 font-semibold tracking-tight text-text-primary">{t.legalTitle}</h3>
@@ -188,6 +192,12 @@ export default function SiteFooter() {
           <div className="flex items-center gap-6">
             <span className="text-sm font-bold tracking-tight text-text-primary">SUNPRIME CONSULTING</span>
           </div>
+        </div>
+
+        {/* Copyright notice + DMCA / Bộ Công Thương badges */}
+        <div className="mt-8 flex flex-col gap-5 border-t border-border-soft pt-8 md:flex-row md:items-center md:justify-between">
+          <p className="max-w-3xl text-xs font-medium leading-relaxed text-text-muted">{t.copyrightNotice}</p>
+          <FooterTrustBadges />
         </div>
       </div>
     </footer>
