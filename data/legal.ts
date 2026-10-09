@@ -3,7 +3,8 @@ import { siteConfig } from "@/lib/site";
 
 /**
  * Nội dung trang pháp lý (bảo mật, điều khoản, cookie), song ngữ vi/en.
- * Bản soạn thảo dựa trên hiện trạng website (không form thu thập dữ liệu, không analytics/cookie theo dõi).
+ * Bản soạn thảo dựa trên hiện trạng website (không form thu thập dữ liệu, không analytics/cookie theo dõi;
+ * có khung chat với trợ lý AI gửi câu hỏi tới Anthropic và lưu lịch sử trong sessionStorage).
  * Cần rà soát lại bởi người có chuyên môn pháp lý và cập nhật khi website thay đổi (vd thêm form, analytics).
  */
 
@@ -43,7 +44,9 @@ const vi: Record<LegalDocKey, LegalDoc> = {
         bullets: [
           "Thông tin bạn chủ động cung cấp khi liên hệ qua điện thoại, Zalo, email hoặc mạng xã hội: họ tên, số điện thoại, email, tên doanh nghiệp và nội dung yêu cầu tư vấn.",
           "Dữ liệu kỹ thuật cơ bản do hạ tầng lưu trữ ghi nhận khi truy cập (địa chỉ IP, loại trình duyệt, thời gian truy cập) nhằm vận hành và bảo mật website.",
-          "Tại thời điểm cập nhật, website không có biểu mẫu thu thập dữ liệu trực tiếp và không sử dụng công cụ phân tích hay quảng cáo theo dõi.",
+          "Nội dung câu hỏi bạn nhập vào khung chat với Trợ lý SunPrime (trợ lý AI). Vui lòng không nhập thông tin nhạy cảm như số căn cước, số tài khoản ngân hàng hay mã số thuế cá nhân.",
+          "Địa chỉ IP và mã phiên trò chuyện được giữ tạm trong bộ nhớ của máy chủ (không lưu lâu dài) để giới hạn số câu hỏi và chống lạm dụng.",
+          "Ngoài khung chat với trợ lý AI nêu trên, tại thời điểm cập nhật website không có biểu mẫu thu thập dữ liệu trực tiếp và không sử dụng công cụ phân tích hay quảng cáo theo dõi.",
         ],
       },
       {
@@ -58,6 +61,7 @@ const vi: Record<LegalDocKey, LegalDoc> = {
         heading: "4. Chia sẻ thông tin",
         paragraphs: [
           "Chúng tôi không bán thông tin cá nhân của bạn. Thông tin chỉ được chia sẻ khi cần thiết để thực hiện dịch vụ theo yêu cầu của bạn (ví dụ nộp hồ sơ cho cơ quan nhà nước thay mặt bạn), cho nhà cung cấp hạ tầng hoặc dịch vụ hỗ trợ vận hành, hoặc khi pháp luật yêu cầu.",
+          "Khi bạn dùng khung chat với Trợ lý SunPrime, nội dung câu hỏi (kèm vài lượt trao đổi gần nhất trong phiên) được gửi đến Anthropic, nhà cung cấp mô hình AI, để tạo câu trả lời. Nhà cung cấp xử lý dữ liệu theo điều khoản và chính sách quyền riêng tư của họ. Website không lưu nội dung hội thoại trên máy chủ của SunPrime; lịch sử trò chuyện chỉ được lưu tạm trong trình duyệt của bạn cho đến khi bạn đóng thẻ trình duyệt. Câu trả lời của trợ lý AI chỉ mang tính tham khảo, không thay thế tư vấn chính thức có hồ sơ.",
         ],
       },
       {
@@ -98,7 +102,7 @@ const vi: Record<LegalDocKey, LegalDoc> = {
       {
         heading: "2. Tính chất thông tin trên website",
         paragraphs: [
-          "Nội dung trên website mang tính giới thiệu và tham khảo chung. Nội dung không thay thế tư vấn pháp lý, kế toán hay thuế chính thức cho từng trường hợp cụ thể. Bạn nên liên hệ để được tư vấn trước khi ra quyết định dựa trên thông tin này.",
+          "Nội dung trên website mang tính giới thiệu và tham khảo chung. Nội dung không thay thế tư vấn pháp lý, kế toán hay thuế chính thức cho từng trường hợp cụ thể. Bạn nên liên hệ để được tư vấn trước khi ra quyết định dựa trên thông tin này. Câu trả lời do trợ lý AI trên website đưa ra cũng chỉ mang tính tham khảo và có thể chưa đầy đủ hoặc chưa cập nhật.",
         ],
       },
       {
@@ -147,14 +151,15 @@ const vi: Record<LegalDocKey, LegalDoc> = {
       {
         heading: "1. Cookie là gì",
         paragraphs: [
-          "Cookie là tệp nhỏ được lưu trên thiết bị khi bạn truy cập website, giúp ghi nhớ lựa chọn hoặc ghi nhận hoạt động. Các công nghệ tương tự gồm bộ nhớ cục bộ (localStorage) của trình duyệt.",
+          "Cookie là tệp nhỏ được lưu trên thiết bị khi bạn truy cập website, giúp ghi nhớ lựa chọn hoặc ghi nhận hoạt động. Các công nghệ tương tự gồm bộ nhớ cục bộ (localStorage) và bộ nhớ phiên (sessionStorage) của trình duyệt.",
         ],
       },
       {
         heading: "2. Website của chúng tôi sử dụng gì",
         bullets: [
           "Không đặt cookie theo dõi hoặc quảng cáo và không dùng công cụ phân tích tại thời điểm cập nhật.",
-          "Chỉ lưu lựa chọn ngôn ngữ (vi/en) trong bộ nhớ cục bộ của trình duyệt với khóa “sunprime-lang”. Dữ liệu này không được gửi đến máy chủ của chúng tôi.",
+          "Lưu lựa chọn ngôn ngữ (vi/en) trong bộ nhớ cục bộ của trình duyệt với khóa “sunprime-lang”. Dữ liệu này không được gửi đến máy chủ của chúng tôi.",
+          "Khi bạn dùng khung chat với Trợ lý SunPrime, lịch sử hội thoại được lưu trong bộ nhớ phiên (sessionStorage) của trình duyệt với khóa “sunprime-chat” để không mất khi chuyển trang và tự mất khi bạn đóng thẻ trình duyệt. Nội dung câu hỏi chỉ được gửi đi khi bạn bấm gửi (xem Chính sách bảo mật).",
         ],
       },
       {
@@ -163,12 +168,13 @@ const vi: Record<LegalDocKey, LegalDoc> = {
           "Trang Liên hệ nhúng bản đồ Google Maps; Google có thể đặt cookie hoặc ghi nhận dữ liệu truy cập theo chính sách của Google khi bạn tải bản đồ.",
           "Biểu tượng giao diện được tải từ mạng phân phối nội dung (CDN) của Iconify nên nhà cung cấp này có thể ghi nhận địa chỉ IP.",
           "Khi bạn nhấn vào liên kết mạng xã hội (Facebook, Instagram, TikTok, Zalo), các nền tảng đó áp dụng chính sách cookie riêng.",
+          "Khung chat với Trợ lý SunPrime gửi nội dung câu hỏi đến Anthropic (nhà cung cấp mô hình AI) để tạo câu trả lời; nhà cung cấp này có thể ghi nhận dữ liệu theo chính sách của họ.",
         ],
       },
       {
         heading: "4. Quản lý cookie",
         paragraphs: [
-          "Bạn có thể xóa cookie và dữ liệu lưu trữ hoặc chặn cookie trong phần cài đặt của trình duyệt. Việc xóa dữ liệu sẽ đặt lại lựa chọn ngôn ngữ về mặc định.",
+          "Bạn có thể xóa cookie và dữ liệu lưu trữ hoặc chặn cookie trong phần cài đặt của trình duyệt. Việc xóa dữ liệu sẽ đặt lại lựa chọn ngôn ngữ về mặc định và xóa lịch sử trò chuyện với trợ lý.",
         ],
       },
       {
@@ -196,7 +202,9 @@ const en: Record<LegalDocKey, LegalDoc> = {
         bullets: [
           "Information you choose to provide when you contact us by phone, Zalo, email or social media: name, phone number, email, business name and the content of your request.",
           "Basic technical data recorded by our hosting infrastructure when you visit (IP address, browser type, access time) to operate and secure the website.",
-          "As of the last update, the website has no forms that collect data directly and does not use analytics or advertising trackers.",
+          "The content of the questions you type into the chat with the SunPrime Assistant (an AI assistant). Please do not enter sensitive information such as ID numbers, bank account numbers or personal tax codes.",
+          "Your IP address and chat session ID are kept temporarily in the server's memory (not stored long term) to limit the number of questions and prevent abuse.",
+          "Apart from the AI chat above, as of the last update the website has no forms that collect data directly and does not use analytics or advertising trackers.",
         ],
       },
       {
@@ -211,6 +219,7 @@ const en: Record<LegalDocKey, LegalDoc> = {
         heading: "4. Sharing",
         paragraphs: [
           "We do not sell your personal information. We share it only when necessary to deliver a service you requested (for example filing dossiers with government authorities on your behalf), with infrastructure or operational support providers, or when required by law.",
+          "When you use the chat with the SunPrime Assistant, the content of your question (together with the last few exchanges in the session) is sent to Anthropic, the AI model provider, to generate an answer. The provider processes data under its own terms and privacy policy. The website does not store chat content on SunPrime's servers; the chat history is kept only temporarily in your browser until you close the browser tab. The AI assistant's answers are for reference only and are not a substitute for formal advice based on your documents.",
         ],
       },
       {
@@ -251,7 +260,7 @@ const en: Record<LegalDocKey, LegalDoc> = {
       {
         heading: "2. Nature of the information",
         paragraphs: [
-          "Content on this website is for general introduction and reference. It is not a substitute for formal legal, accounting or tax advice for a specific case. Please contact us for advice before making decisions based on this information.",
+          "Content on this website is for general introduction and reference. It is not a substitute for formal legal, accounting or tax advice for a specific case. Please contact us for advice before making decisions based on this information. Answers given by the AI assistant on the website are likewise for reference only and may be incomplete or out of date.",
         ],
       },
       {
@@ -299,14 +308,15 @@ const en: Record<LegalDocKey, LegalDoc> = {
       {
         heading: "1. What cookies are",
         paragraphs: [
-          "Cookies are small files stored on your device when you visit a website, used to remember choices or record activity. Similar technologies include the browser's local storage (localStorage).",
+          "Cookies are small files stored on your device when you visit a website, used to remember choices or record activity. Similar technologies include the browser's local storage (localStorage) and session storage (sessionStorage).",
         ],
       },
       {
         heading: "2. What this website uses",
         bullets: [
           "It does not set tracking or advertising cookies and uses no analytics tools as of the last update.",
-          "It only stores your language choice (vi/en) in the browser's local storage under the key “sunprime-lang”. This data is not sent to our servers.",
+          "It stores your language choice (vi/en) in the browser's local storage under the key “sunprime-lang”. This data is not sent to our servers.",
+          "When you use the chat with the SunPrime Assistant, the conversation history is kept in the browser's session storage (sessionStorage) under the key “sunprime-chat” so it is not lost when you change pages; it disappears when you close the browser tab. Your question is sent only when you press send (see the Privacy Policy).",
         ],
       },
       {
@@ -315,12 +325,13 @@ const en: Record<LegalDocKey, LegalDoc> = {
           "The Contact page embeds a Google Maps map; Google may set cookies or record access data under Google's policies when you load the map.",
           "Interface icons are loaded from Iconify's content delivery network (CDN), so that provider may record your IP address.",
           "When you click social links (Facebook, Instagram, TikTok, Zalo), those platforms apply their own cookie policies.",
+          "The chat with the SunPrime Assistant sends the content of your question to Anthropic (the AI model provider) to generate an answer; that provider may record data under its own policies.",
         ],
       },
       {
         heading: "4. Managing cookies",
         paragraphs: [
-          "You can delete cookies and stored data or block cookies in your browser settings. Clearing data resets your language choice to the default.",
+          "You can delete cookies and stored data or block cookies in your browser settings. Clearing data resets your language choice to the default and deletes your chat history with the assistant.",
         ],
       },
       {

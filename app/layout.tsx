@@ -3,7 +3,7 @@ import { Be_Vietnam_Pro, Inter } from "next/font/google";
 import Script from "next/script";
 import Nav from "@/components/nav";
 import SiteFooter from "@/components/footer";
-import ContactFloatingButtons from "@/components/contact";
+import ChatWidget from "@/components/chat/chat-widget";
 import ScrollReveal from "@/components/scroll-reveal";
 import I18nProvider from "@/components/i18n-provider";
 import { serializeJsonLd } from "@/lib/json-ld";
@@ -124,7 +124,7 @@ export default function RootLayout({
           <Nav />
           {children}
           <SiteFooter />
-          <ContactFloatingButtons />
+          <ChatWidget />
         </I18nProvider>
         <Script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" strategy="afterInteractive" />
       </body>
