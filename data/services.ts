@@ -17,6 +17,16 @@ export type ServiceProcess = {
   description: string;
 };
 
+export type ServiceDetailItem = {
+  title: string;
+  description: string;
+};
+
+export type ServiceDetailBlock = {
+  title: string;
+  items: ServiceDetailItem[];
+};
+
 export type ServiceOffering = {
   slug: string;
   title: string;
@@ -28,6 +38,14 @@ export type ServiceOffering = {
   deliverables: string[];
   process: ServiceProcess[];
   documents?: string[];
+  /** Khối "triển khai những gì" kèm mô tả; có thì trang chi tiết dùng thay cho danh sách deliverables. */
+  capabilities?: ServiceDetailBlock;
+  /** Khối nguyên tắc triển khai; có thì trang chi tiết dùng thay cho danh sách benefits. */
+  principles?: ServiceDetailBlock;
+  /** Nhóm doanh nghiệp phù hợp; thay cho câu mặc định ghép từ tên dịch vụ. */
+  fitSegments?: string[];
+  /** Kết trang bằng khối CTA "Bạn cần tư vấn ngay?" (kèm form) thay cho banner đặt lịch mặc định. */
+  hasConsultationCta?: boolean;
 };
 
 export type ServiceCategory = {

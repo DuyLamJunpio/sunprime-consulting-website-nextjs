@@ -2,9 +2,13 @@
 
 import Link from "next/link";
 import { getServiceBySlug, getServiceCategories } from "@/data/services";
+import ConsultationCtaSection from "@/components/consultation-cta-section";
 import { useI18n } from "@/components/i18n-provider";
 import { showSampleContent } from "@/lib/feature-flags";
 import { messages } from "@/lib/i18n/messages";
+
+/** Một dòng trong khối phạm vi / giá trị: có description thì hiển thị kèm tiêu đề đậm. */
+type DetailRow = { title: string; description?: string };
 
 export default function ServiceDetailContent({ slug }: { slug: string }) {
   const { lang } = useI18n();
@@ -17,7 +21,11 @@ export default function ServiceDetailContent({ slug }: { slug: string }) {
   const relatedServices =
     category?.services.filter((item) => item.slug !== service.slug).slice(0, 3) ?? [];
 
-  const fitSegments =
+  const scopeItems: DetailRow[] = service.capabilities?.items ?? service.deliverables.map((title) => ({ title }));
+  const valueItems: DetailRow[] = service.principles?.items ?? service.benefits.map((title) => ({ title }));
+  const showFinalSection = !service.hasConsultationCta || relatedServices.length > 0;
+
+  const defaultFitSegments =
     lang === "vi"
       ? [
           `Doanh nghiệp đang cần triển khai ${service.title.toLowerCase()} theo đúng quy định.`,
@@ -29,6 +37,7 @@ export default function ServiceDetailContent({ slug }: { slug: string }) {
           "Teams that want a clear process, transparent deadlines and a specific owner.",
           "Owners who need easy-to-read reports to decide fast and limit risk.",
         ];
+  const fitSegments = service.fitSegments ?? defaultFitSegments;
 
   const faqItems =
     lang === "vi"
@@ -185,27 +194,43 @@ export default function ServiceDetailContent({ slug }: { slug: string }) {
           <div className="grid gap-6 lg:grid-cols-[1.25fr_1fr]">
             <div className="rounded-3xl border border-border bg-surface-card p-6 lg:p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-text-muted">{t.scopeEyebrow}</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-text-primary">{t.scopeTitle}</h2>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-text-primary">
+                {service.capabilities?.title ?? t.scopeTitle}
+              </h2>
               <ul className="mt-6 space-y-3">
-                {service.deliverables.map((item) => (
+                {scopeItems.map(({ title, description }) => (
                   <li
-                    key={item}
+                    key={title}
                     className="flex items-start gap-3 rounded-xl border border-border bg-surface-section px-4 py-3 transition-all duration-300 hover:border-brand-ring"
                   >
                     <span className="mt-2 inline-flex h-2 w-2 rounded-full bg-brand" />
-                    <p className="text-sm text-text-secondary">{item}</p>
+                    {description ? (
+                      <div>
+                        <p className="text-sm font-semibold text-text-primary">{title}</p>
+                        <p className="mt-1 text-sm leading-relaxed text-text-secondary">{description}</p>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-text-secondary">{title}</p>
+                    )}
                   </li>
                 ))}
               </ul>
             </div>
 
             <div className="rounded-3xl border border-brand-ring bg-brand-soft/55 p-6">
-              <p className="text-sm font-semibold text-text-primary">{t.valueTitle}</p>
+              <p className="text-sm font-semibold text-text-primary">{service.principles?.title ?? t.valueTitle}</p>
               <ul className="mt-4 space-y-3">
-                {service.benefits.map((benefit) => (
-                  <li key={benefit} className="flex items-start gap-2.5">
+                {valueItems.map(({ title, description }) => (
+                  <li key={title} className="flex items-start gap-2.5">
                     <iconify-icon icon="solar:check-circle-bold-duotone" width={18} className="mt-0.5 text-brand" />
-                    <span className="text-sm leading-relaxed text-text-secondary">{benefit}</span>
+                    {description ? (
+                      <div>
+                        <p className="text-sm font-semibold text-text-primary">{title}</p>
+                        <p className="mt-0.5 text-sm leading-relaxed text-text-secondary">{description}</p>
+                      </div>
+                    ) : (
+                      <span className="text-sm leading-relaxed text-text-secondary">{title}</span>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -270,8 +295,10 @@ export default function ServiceDetailContent({ slug }: { slug: string }) {
         </div>
       </section>
 
+      {showFinalSection && (
       <section className="py-14">
         <div className="mx-auto max-w-7xl space-y-8 px-4 sm:px-6 lg:px-8">
+          {!service.hasConsultationCta && (
           <div className="rounded-3xl border border-brand bg-brand px-6 py-8 text-text-inverse shadow-[0_20px_45px_rgba(156,90,52,0.26)] lg:px-10">
             <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
               <div>
@@ -309,6 +336,7 @@ export default function ServiceDetailContent({ slug }: { slug: string }) {
               )}
             </div>
           </div>
+          )}
 
           {relatedServices.length > 0 && (
             <div className="space-y-6">
@@ -341,6 +369,9 @@ export default function ServiceDetailContent({ slug }: { slug: string }) {
           )}
         </div>
       </section>
+      )}
+
+      {service.hasConsultationCta && <ConsultationCtaSection />}
     </main>
   );
 }

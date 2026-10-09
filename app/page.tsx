@@ -1,8 +1,9 @@
 'use client';
-import ConsultationForm from "@/components/consultation-form";
+import ConsultationCtaSection from "@/components/consultation-cta-section";
 import { useI18n } from "@/components/i18n-provider";
 import type { NewsPost } from "@/data/news-api";
 import { getAllServices, getServiceCategories } from "@/data/services";
+import { AI_SOLUTIONS_SLUG } from "@/data/services-ai";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -14,6 +15,7 @@ export default function Home() {
   const featuredServiceCards = [
     ...getAllServices(lang).filter((service) => service.categoryId === "ke-toan").slice(0, 3),
     ...getAllServices(lang).filter((service) => service.categoryId === "thanh-lap").slice(0, 3),
+    ...getAllServices(lang).filter((service) => service.slug === AI_SOLUTIONS_SLUG),
   ];
   const heroServiceCategories = useMemo(
     () =>
@@ -94,10 +96,6 @@ export default function Home() {
         "Cập nhật các bài viết mới về kế toán, pháp lý và vận hành doanh nghiệp từ đội ngũ SunPrime.",
       viewAll: "Xem tất cả",
       readMore: "Đọc tiếp",
-      ctaTitle: "Bạn cần tư vấn ngay?",
-      ctaDesc:
-        "Đội ngũ SunPrime sẵn sàng hỗ trợ doanh nghiệp về pháp lý, kế toán và vận hành với lộ trình rõ ràng, minh bạch ngay từ đầu.",
-      ctaButton: "Nhận tư vấn miễn phí",
       reasons: [
         {
           title: "Hiểu sâu thực tế doanh nghiệp",
@@ -160,10 +158,6 @@ export default function Home() {
         "The latest articles on accounting, legal and business operations from the SunPrime team.",
       viewAll: "View all",
       readMore: "Read more",
-      ctaTitle: "Need advice right now?",
-      ctaDesc:
-        "The SunPrime team is ready to support your business in legal, accounting and operations with a clear, transparent roadmap from the start.",
-      ctaButton: "Get a free consultation",
       reasons: [
         {
           title: "Deep understanding of your business",
@@ -245,6 +239,21 @@ export default function Home() {
             <path d="M15 3v5h5" />
             <path d="M9 13h6" />
             <path d="M9 17h6" />
+          </svg>
+        );
+      case AI_SOLUTIONS_SLUG:
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8" aria-hidden="true">
+            <rect x="6" y="6" width="12" height="12" rx="2" />
+            <path d="M9 3v3" />
+            <path d="M15 3v3" />
+            <path d="M9 18v3" />
+            <path d="M15 18v3" />
+            <path d="M3 9h3" />
+            <path d="M3 15h3" />
+            <path d="M18 9h3" />
+            <path d="M18 15h3" />
+            <path d="M12 9.5l.9 1.6 1.6.9-1.6.9-.9 1.6-.9-1.6-1.6-.9 1.6-.9z" />
           </svg>
         );
       default:
@@ -981,34 +990,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-brand">
-        <div className="pointer-events-none absolute inset-0 opacity-[0.14] [background-image:linear-gradient(rgba(255,255,255,0.24)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.24)_1px,transparent_1px)] [background-size:34px_34px]" />
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center gap-12 lg:flex-row lg:gap-20">
-            <div className="w-full py-20 lg:w-1/2 lg:py-28">
-              <span className="mb-6 inline-flex items-center rounded-full bg-state-success px-3 py-1 text-xs font-semibold tracking-wide text-text-inverse">
-                SunPrime Consulting
-              </span>
-              <h2 className="mb-6 text-4xl font-semibold tracking-tight text-text-inverse lg:text-5xl">
-                {th.ctaTitle}
-              </h2>
-              <p className="mb-10 text-lg font-normal text-text-inverse">
-                {th.ctaDesc}
-              </p>
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center rounded-lg border border-transparent bg-button-text-dark px-8 py-3.5 text-base font-semibold text-text-inverse transition-all duration-200 hover:bg-text-primary hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-border-strong focus:ring-offset-2"
-              >
-                {th.ctaButton}
-              </Link>
-            </div>
-
-            <div className="w-full pb-20 lg:w-1/2 lg:py-20">
-              <ConsultationForm />
-            </div>
-          </div>
-        </div>
-      </section>
+      <ConsultationCtaSection />
 
       <style jsx global>{`
         @keyframes scroll-left {

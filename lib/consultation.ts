@@ -1,9 +1,12 @@
+import { getServiceCategories } from "@/data/services";
+import { AI_SOLUTIONS_SLUG } from "@/data/services-ai";
 import type { Lang } from "@/lib/i18n/messages";
 
 export type ConsultationFormData = {
   fullName: string;
   phone: string;
   email: string;
+  /** Giá trị ô "Dịch vụ quan tâm": "category:<id nhóm>" hoặc "service:<slug dịch vụ>"; rỗng nếu chưa chọn. */
   serviceId: string;
   message: string;
   consent: boolean;
@@ -54,6 +57,25 @@ export function validateConsultation(data: ConsultationFormData, lang: Lang): Co
   if (!data.consent) errors.consent = messages.consent;
 
   return errors;
+}
+
+export type ConsultationServiceOption = {
+  /** "category:<id nhóm>" hoặc "service:<slug dịch vụ>" để phía nhận phân biệt được hai loại. */
+  value: string;
+  label: string;
+};
+
+/** Dịch vụ lẻ được liệt kê riêng trong dropdown, ngay sau nhóm dịch vụ chứa nó. */
+const STANDALONE_OFFERING_SLUGS: readonly string[] = [AI_SOLUTIONS_SLUG];
+
+/** Các lựa chọn cho ô "Dịch vụ quan tâm": mỗi nhóm dịch vụ, kèm dịch vụ lẻ nổi bật ngay sau nhóm của nó. */
+export function getConsultationServiceOptions(lang: Lang): ConsultationServiceOption[] {
+  return getServiceCategories(lang).flatMap((category) => [
+    { value: `category:${category.id}`, label: category.title },
+    ...category.services
+      .filter((service) => STANDALONE_OFFERING_SLUGS.includes(service.slug))
+      .map((service) => ({ value: `service:${service.slug}`, label: service.title })),
+  ]);
 }
 
 /** Lỗi báo rằng việc gửi form chưa được nối vào nơi nhận (email, Telegram hoặc API backend). */

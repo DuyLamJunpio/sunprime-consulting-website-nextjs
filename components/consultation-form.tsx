@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { useId, useState, type FormEvent, type ReactNode } from "react";
 import { useI18n } from "@/components/i18n-provider";
-import { getServiceCategories } from "@/data/services";
 import {
   MESSAGE_MAX_LENGTH,
   emptyConsultationForm,
+  getConsultationServiceOptions,
   submitConsultation,
   validateConsultation,
   type ConsultationErrors,
@@ -111,7 +111,7 @@ export default function ConsultationForm() {
   const [data, setData] = useState<ConsultationFormData>(emptyConsultationForm);
   const [errors, setErrors] = useState<ConsultationErrors>({});
   const [status, setStatus] = useState<Status>("idle");
-  const categories = getServiceCategories(lang);
+  const serviceOptions = getConsultationServiceOptions(lang);
   const isSubmitting = status === "submitting";
   const fieldId = (name: string) => `${baseId}-${name}`;
 
@@ -229,9 +229,9 @@ export default function ConsultationForm() {
             className={inputClass(false)}
           >
             <option value="">{t.servicePlaceholder}</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.title}
+            {serviceOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>

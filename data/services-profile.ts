@@ -1,7 +1,9 @@
 import type { ServiceCategory, ServiceOffering } from "@/data/services";
+import { aiSolutionsEn, aiSolutionsVi } from "@/data/services-ai";
 
 /**
  * Dịch vụ bổ sung theo SunPrime Company Profile (PROFILE.pdf), cả vi và en.
+ * Ngoài profile, nhóm giai-phap-so còn gắn thêm dịch vụ AI từ services-ai.ts (nội dung theo brief riêng).
  * - Hạng mục bàn giao (deliverables) lấy nguyên từ profile; không thêm số liệu cam kết.
  * - Phần stats chỉ dùng số hạng mục và phạm vi hoạt động (Việt Nam) có trong profile.
  * - benefits/process là diễn giải chung, nên rà soát lại trước khi công bố.
@@ -176,6 +178,7 @@ export const profileCategoriesVi: ServiceCategory[] = [
           { title: "Đồng hành", description: "Hướng dẫn sử dụng và hỗ trợ trong quá trình vận hành." },
         ],
       },
+      aiSolutionsVi,
     ],
   },
   {
@@ -388,6 +391,7 @@ export const profileCategoriesEn: ServiceCategory[] = [
           { title: "Support", description: "Guide usage and support you during operation." },
         ],
       },
+      aiSolutionsEn,
     ],
   },
   {
