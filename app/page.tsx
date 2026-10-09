@@ -1,4 +1,5 @@
 'use client';
+import ConsultationForm from "@/components/consultation-form";
 import { useI18n } from "@/components/i18n-provider";
 import type { NewsPost } from "@/data/news-api";
 import { getAllServices, getServiceCategories } from "@/data/services";
@@ -1002,109 +1003,8 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="relative w-full lg:w-1/2">
-              <div className="rounded-2xl bg-transparent p-4 lg:p-5">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <div>
-                    <a
-                      href="https://www.instagram.com/sunprime.danang/"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mb-3 inline-flex items-center gap-2 text-base font-semibold text-white hover:text-white/80"
-                    >
-                      Follow Instagram
-                      <span aria-hidden="true">↗</span>
-                    </a>
-                    <div className="grid grid-cols-3 gap-1.5">
-                      {[
-                        "https://images.unsplash.com/photo-1590846406792-0adc7f938f1d?q=80&w=800&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=800&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1543779503-664c37a21e7e?q=80&w=800&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1517433670267-08bbd4be890f?q=80&w=800&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1481833761820-0509d3217039?q=80&w=800&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop",
-                      ].map((src, index) => (
-                        <div key={`insta-${index}`} className="relative aspect-square overflow-hidden rounded-sm">
-                          <Image
-                            src={src}
-                            alt={`Instagram post ${index + 1}`}
-                            fill
-                            sizes="(min-width: 1024px) 16vw, 33vw"
-                            className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <a
-                      href="https://www.facebook.com/profile.php?id=61586874073145&locale=vi_VN"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mb-3 inline-flex items-center gap-2 text-base font-semibold text-white hover:text-white/80"
-                    >
-                      Follow Facebook
-                      <span aria-hidden="true">↗</span>
-                    </a>
-                    <div className="grid grid-cols-3 gap-1.5">
-                      {[
-                        "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=800&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=800&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?q=80&w=800&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800&auto=format&fit=crop",
-                      ].map((src, index) => (
-                        <div key={`facebook-${index}`} className="relative aspect-square overflow-hidden rounded-sm">
-                          <Image
-                            src={src}
-                            alt={`Facebook post ${index + 1}`}
-                            fill
-                            sizes="(min-width: 1024px) 16vw, 33vw"
-                            className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <a
-                    href="https://www.tiktok.com/@sun.prime0"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mb-3 inline-flex items-center gap-2 text-base font-semibold text-white hover:text-white/80"
-                  >
-                    Follow TikTok
-                    <span aria-hidden="true">↗</span>
-                  </a>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      "https://images.unsplash.com/photo-1521302200778-33500795e128?q=80&w=900&auto=format&fit=crop",
-                      "https://images.unsplash.com/photo-1530023367847-a683933f4172?q=80&w=900&auto=format&fit=crop",
-                      "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=900&auto=format&fit=crop",
-                    ].map((src, index) => (
-                      <div key={`tiktok-${index}`} className="group relative aspect-[9/16] overflow-hidden rounded-sm">
-                        <Image
-                          src={src}
-                          alt={`TikTok video ${index + 1}`}
-                          fill
-                          sizes="(min-width: 1024px) 16vw, 32vw"
-                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-black/20 transition-colors duration-300 group-hover:bg-black/10" />
-                        <span className="absolute inset-0 flex items-center justify-center">
-                          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-slate-900 shadow-md">
-                            ▶
-                          </span>
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+            <div className="w-full pb-20 lg:w-1/2 lg:py-20">
+              <ConsultationForm />
             </div>
           </div>
         </div>
