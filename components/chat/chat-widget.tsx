@@ -15,6 +15,7 @@ import {
 } from "@/components/chat/use-widget-layout";
 import { useI18n } from "@/components/i18n-provider";
 import { cn } from "@/lib/cn";
+import { CHAT_ENABLED } from "@/lib/chat/config";
 
 type PanelView = "menu" | "chat";
 
@@ -168,6 +169,7 @@ export default function ChatWidget() {
             <ChatView
               chat={chat}
               copy={copy}
+              enabled={CHAT_ENABLED}
               titleId={titleId}
               onBack={() => setView("menu")}
               onClose={closePanel}

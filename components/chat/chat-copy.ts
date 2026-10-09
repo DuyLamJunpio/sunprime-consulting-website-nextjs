@@ -19,11 +19,13 @@ export type ChatCopy = {
   chatTitle: string;
   meetExpert: string;
   greeting: string;
+  disabledNotice: string;
   disclaimer: string;
   suggestionsLabel: string;
   suggestions: readonly string[];
   inputLabel: string;
   inputPlaceholder: string;
+  inputDisabledPlaceholder: string;
   inputLimitPlaceholder: string;
   send: string;
   typing: string;
@@ -48,6 +50,7 @@ const vi: ChatCopy = {
   meetExpert: "Gặp chuyên viên",
   greeting:
     "Xin chào, tôi là trợ lý AI của SunPrime. Tôi hỗ trợ giải đáp nhanh về kế toán, thuế và thủ tục doanh nghiệp. Với trường hợp cụ thể của anh/chị, chuyên viên sẽ liên hệ tư vấn trực tiếp.",
+  disabledNotice: "Trợ lý AI SunPrime đang được hoàn thiện và sẽ sớm ra mắt.",
   disclaimer: "Nội dung mang tính tham khảo, không thay thế tư vấn chính thức có hồ sơ.",
   suggestionsLabel: "Gợi ý câu hỏi",
   suggestions: [
@@ -58,6 +61,7 @@ const vi: ChatCopy = {
   ],
   inputLabel: "Nhập câu hỏi",
   inputPlaceholder: "Nhập câu hỏi của anh/chị…",
+  inputDisabledPlaceholder: "Trợ lý AI đang được hoàn thiện",
   inputLimitPlaceholder: "Đã hết lượt hỏi trong phiên này",
   send: "Gửi",
   typing: "Đang trả lời…",
@@ -95,6 +99,7 @@ const en: ChatCopy = {
   meetExpert: "Talk to a specialist",
   greeting:
     "Hello, I'm SunPrime's AI assistant. I can quickly answer questions about accounting, tax and business procedures. For your specific case, a specialist will advise you directly.",
+  disabledNotice: "The SunPrime AI assistant is being refined and will launch soon.",
   disclaimer: "For reference only; not a substitute for formal advice based on your documents.",
   suggestionsLabel: "Suggested questions",
   suggestions: [
@@ -105,6 +110,7 @@ const en: ChatCopy = {
   ],
   inputLabel: "Type your question",
   inputPlaceholder: "Type your question…",
+  inputDisabledPlaceholder: "The AI assistant is being refined",
   inputLimitPlaceholder: "No questions left in this session",
   send: "Send",
   typing: "Answering…",

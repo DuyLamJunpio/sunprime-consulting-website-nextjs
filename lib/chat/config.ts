@@ -31,6 +31,12 @@ export const CHAT_LIMITS = {
   maxRequestBodyChars: 20_000,
 } as const;
 
+/**
+ * Chat AI chỉ được bật khi có cấu hình production rõ ràng. Mặc định false để
+ * giao diện có thể phát hành trước mà không gửi bất kỳ request nào tới /api/chat.
+ */
+export const CHAT_ENABLED = process.env.NEXT_PUBLIC_CHAT_ENABLED === "true";
+
 /** Một "phiên" ở phía server được tính trong khoảng thời gian này kể từ lượt hỏi đầu tiên. */
 export const CHAT_SESSION_WINDOW_MS = 6 * 60 * 60 * 1000;
 

@@ -73,13 +73,14 @@ function TypingIndicator({ label }: { label: string }) {
 type ChatViewProps = {
   chat: ChatController;
   copy: ChatCopy;
+  enabled: boolean;
   titleId: string;
   onBack: () => void;
   onClose: () => void;
 };
 
 /** Khung chat với trợ lý: đầu khung luôn có nút "Gặp chuyên viên", chân khung luôn có dòng lưu ý. */
-export default function ChatView({ chat, copy, titleId, onBack, onClose }: ChatViewProps) {
+export default function ChatView({ chat, copy, enabled, titleId, onBack, onClose }: ChatViewProps) {
   const { messages, isStreaming, isLimitReached, send } = chat;
   const [draft, setDraft] = useState("");
   const listRef = useRef<HTMLDivElement>(null);
@@ -89,7 +90,7 @@ export default function ChatView({ chat, copy, titleId, onBack, onClose }: ChatV
   const hasUserMessage = messages.some((message) => message.role === "user");
   const lastMessage = messages.at(-1);
   const isWaitingForFirstToken = lastMessage?.isStreaming === true && lastMessage.content === "";
-  const canSend = draft.trim().length > 0 && !isStreaming && !isLimitReached;
+  const canSend = enabled && draft.trim().length > 0 && !isStreaming && !isLimitReached;
 
   // Tự cuộn xuống cuối khi có tin mới hoặc đang nhận chữ. Chưa có tin nào thì giữ nguyên để lời chào không bị cắt mép trên.
   useEffect(() => {
@@ -99,11 +100,11 @@ export default function ChatView({ chat, copy, titleId, onBack, onClose }: ChatV
 
   // Chỉ tự đặt con trỏ vào ô nhập trên thiết bị có chuột; trên điện thoại làm vậy sẽ bật bàn phím che lời chào.
   useEffect(() => {
-    if (window.matchMedia("(pointer: fine)").matches) inputRef.current?.focus();
-  }, []);
+    if (enabled && window.matchMedia("(pointer: fine)").matches) inputRef.current?.focus();
+  }, [enabled]);
 
   const submit = () => {
-    if (!canSend) return;
+    if (!enabled || !canSend) return;
     const text = draft;
     setDraft("");
     if (inputRef.current) inputRef.current.style.height = "auto";
@@ -169,6 +170,12 @@ export default function ChatView({ chat, copy, titleId, onBack, onClose }: ChatV
           </p>
         </div>
 
+        {!enabled ? (
+          <div className="rounded-2xl border border-brand-ring bg-brand-soft px-3.5 py-3 text-sm leading-relaxed text-brand-ink">
+            {copy.disabledNotice}
+          </div>
+        ) : null}
+
         {messages.map((message) => (
           <MessageBubble key={message.id} message={message} copy={copy} />
         ))}
@@ -193,8 +200,10 @@ export default function ChatView({ chat, copy, titleId, onBack, onClose }: ChatV
               <button
                 key={suggestion}
                 type="button"
-                disabled={isStreaming}
-                onClick={() => void send(suggestion)}
+                disabled={!enabled || isStreaming}
+                onClick={() => {
+                  if (enabled) void send(suggestion);
+                }}
                 className="rounded-full border border-border-strong bg-surface-base px-3 py-1.5 text-left text-xs font-medium text-text-secondary transition-colors hover:border-brand hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {suggestion}
@@ -215,8 +224,8 @@ export default function ChatView({ chat, copy, titleId, onBack, onClose }: ChatV
             rows={1}
             value={draft}
             maxLength={CHAT_LIMITS.maxQuestionChars}
-            disabled={isLimitReached}
-            placeholder={isLimitReached ? copy.inputLimitPlaceholder : copy.inputPlaceholder}
+            disabled={!enabled || isLimitReached}
+            placeholder={!enabled ? copy.inputDisabledPlaceholder : isLimitReached ? copy.inputLimitPlaceholder : copy.inputPlaceholder}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             className="max-h-28 min-h-11 flex-1 resize-none rounded-xl border border-border-strong bg-surface-base px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand-ring disabled:cursor-not-allowed disabled:bg-surface-section"
